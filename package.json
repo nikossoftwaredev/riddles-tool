@@ -1,6 +1,6 @@
 {
   "name": "riddles-tool",
-  "homepage": "https://nikossoftwaredev.github.io/riddles-tool",
+  "homepage": "https://nikossoftwaredev.github.io",
   "private": true,
   "version": "0.0.0",
   "scripts": {
@@ -26,7 +26,6 @@
   },
   "devDependencies": {
     "@types/greek-utils": "^1.2.0",
-    "@types/react": "^17.0.33",
     "@types/react-dom": "^17.0.10",
     "@typescript-eslint/eslint-plugin": "^5.27.0",
     "@typescript-eslint/parser": "^5.27.0",
