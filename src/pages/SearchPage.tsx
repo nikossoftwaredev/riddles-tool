@@ -39,12 +39,14 @@ const SearchPage = () => {
     let filteredStreets = MOSCHATO_STREETS;
     let term = searchFilters.searchTerm.toLowerCase();
     term = toGreek(term);
+    term = term.replaceAll(";", "?");
 
     if (searchFilters.characters > 0) {
       filteredStreets = filteredStreets.filter(
         (street) => street.length === searchFilters.characters
       );
     }
+
     if (term.match(/\?|\*/g)) {
       const isMatch = wcmatch(term);
 
