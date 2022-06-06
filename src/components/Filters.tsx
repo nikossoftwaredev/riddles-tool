@@ -3,10 +3,14 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-import { Paper, Stack, TextField, Typography } from "@mui/material";
+import { FormControlLabel, Radio, RadioGroup, TextField } from "@mui/material";
 
 interface SearchFiltersProps {
-  searchFilters: { searchTerm: string; characters: number };
+  searchFilters: {
+    searchTerm: string;
+    characters: number;
+    searchMode: string;
+  };
   handleChange: (
     value: any,
     dataField: keyof SearchFiltersProps["searchFilters"]
@@ -15,16 +19,26 @@ interface SearchFiltersProps {
 const SearchFilters = ({ searchFilters, handleChange }: SearchFiltersProps) => {
   return (
     <>
-      <Paper
-        elevation={5}
-        style={{ backgroundColor: "#fdf8d6", color: "purple", width: "70%" }}
-      >
-        <Stack gap={1} p={3} alignContent="center" justifyContent="center">
-          <Typography textAlign="center">E?ΡΟ? ➡ ΕΒΡΟΥ</Typography>
-          <Typography textAlign="center">*ΡΟΥ ➡ ΕΒΡΟΥ</Typography>
-          <Typography textAlign="center">evRou ➡ ΕΒΡΟΥ</Typography>
-        </Stack>
-      </Paper>
+      <FormControl>
+        <RadioGroup
+          aria-labelledby="demo-radio-buttons-group-label"
+          defaultValue="search"
+          name="radio-buttons-group"
+          onChange={(e) => handleChange(e.target.value, "searchMode")}
+        >
+          <FormControlLabel value="search" control={<Radio />} label="Search" />
+          <FormControlLabel
+            value="anagram"
+            control={<Radio />}
+            label="Anagram"
+          />
+          <FormControlLabel
+            value="contains"
+            control={<Radio />}
+            label="Contains"
+          />
+        </RadioGroup>
+      </FormControl>
       <TextField
         style={{ width: "350px" }}
         fullWidth

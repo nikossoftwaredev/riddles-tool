@@ -19,6 +19,7 @@ import { toGreek } from "greek-utils";
 const defaultFilters = {
   searchTerm: "",
   characters: 0,
+  searchMode: "search",
 };
 
 const showInMapClicked = (term: string) => {
@@ -40,6 +41,21 @@ const SearchPage = () => {
     let term = searchFilters.searchTerm.toLowerCase();
     term = toGreek(term);
     term = term.replaceAll(";", "?");
+
+    if (searchFilters.searchMode === "anagram") {
+      return filteredStreets.filter((word) => {
+        return (
+          word.toLowerCase().split("").sort().join("") ===
+          term.split("").sort().join("")
+        );
+      });
+    }
+
+    if (searchFilters.searchMode === "contains") {
+      return filteredStreets.filter((word) => {
+        return term.split("").every((t) => word.toLowerCase().includes(t));
+      });
+    }
 
     if (searchFilters.characters > 0) {
       filteredStreets = filteredStreets.filter(

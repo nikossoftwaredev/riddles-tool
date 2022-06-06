@@ -2,9 +2,8 @@ import React, { useMemo } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
-
 import SearchPage from "./SearchPage";
-import Num2LettersPage from "./Num2LettersPage";
+import LettersNumbers from "./LettersNumbers";
 
 const tabsConfig = [
   {
@@ -12,8 +11,8 @@ const tabsConfig = [
     tabContent: <SearchPage />,
   },
   {
-    tabName: "num2letters",
-    tabContent: <Num2LettersPage />,
+    tabName: "numberLetters",
+    tabContent: <LettersNumbers />,
   },
 ];
 
@@ -30,12 +29,14 @@ const RiddleTabs = () => {
   return (
     <>
       <Tabs
+        variant="scrollable"
+        scrollButtons="auto"
         value={tabIndex}
         onChange={(e, newValue) => navigate(`/${tabsConfig[newValue].tabName}`)}
         aria-label="basic tabs example"
       >
         <Tab label="Search" id="search" />
-        <Tab label="Num to letters" id="num2letters" />
+        <Tab label="Numbers-Letters" id="numberLetters" />
       </Tabs>
       {tabsConfig[tabIndex].tabContent}
     </>

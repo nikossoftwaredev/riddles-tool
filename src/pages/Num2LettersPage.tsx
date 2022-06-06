@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from "react";
 import { Stack, TextField, Typography } from "@mui/material";
-
+import { ChemElements } from "@chemistry/elements";
 import { greekLetters, englishLetters } from "../data/letters";
 
 const Num2LettersPage = () => {
@@ -9,14 +9,31 @@ const Num2LettersPage = () => {
   const greekText = useMemo(() => {
     const numberArray = numbers
       .split(" ")
-      .map((number: string) => greekLetters[parseInt(number) - 1]);
+      .map((number: string) => greekLetters[parseInt(number) - 1])
+      .join(" ")
+      .toUpperCase();
     return numberArray;
   }, [numbers]);
 
   const englishText = useMemo(() => {
     const numberArray = numbers
       .split(" ")
-      .map((number: string) => englishLetters[parseInt(number) - 1]);
+      .map((number: string) => englishLetters[parseInt(number) - 1])
+      .join(" ")
+      .toUpperCase();
+
+    return numberArray;
+  }, [numbers]);
+
+  const chemistryText = useMemo(() => {
+    const numberArray = numbers
+      .split(" ")
+      .map(
+        (number: string) =>
+          (ChemElements.getById(parseInt(number)) || {}).symbol
+      )
+      .join(" ")
+      .toUpperCase();
 
     return numberArray;
   }, [numbers]);
@@ -40,6 +57,10 @@ const Num2LettersPage = () => {
         <Stack direction="row" alignItems="center" gap={1}>
           <img height="16px" width="25px" src="assets/en.svg" />
           <Typography>{englishText}</Typography>
+        </Stack>
+        <Stack direction="row" alignItems="center" gap={1}>
+          <img height="16px" width="25px" src="assets/pt.svg" />
+          <Typography>{chemistryText}</Typography>
         </Stack>
       </Stack>
     </Stack>

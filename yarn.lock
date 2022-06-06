@@ -241,6 +241,11 @@
     "@babel/helper-validator-identifier" "^7.16.7"
     to-fast-properties "^2.0.0"
 
+"@chemistry/elements@^2.9.0":
+  version "2.9.0"
+  resolved "https://registry.yarnpkg.com/@chemistry/elements/-/elements-2.9.0.tgz#94dccdd93b3960970c381fbf2bce66f4bd891e2f"
+  integrity sha512-rvTQu2pvFSLtfNSAqexhLi6MmCFjtX8OJD2lyINEUnzH2QW6hC6TOhWswZ/R4D2aWNo1JBYkoHVgo9K8LOTLTQ==
+
 "@date-io/core@^2.14.0":
   version "2.14.0"
   resolved "https://registry.yarnpkg.com/@date-io/core/-/core-2.14.0.tgz#03e9b9b9fc8e4d561c32dd324df0f3ccd967ef14"
