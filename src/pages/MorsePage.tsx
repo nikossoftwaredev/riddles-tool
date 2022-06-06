@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Button, Stack, Typography } from "@mui/material";
 import SpaceBarIcon from "@mui/icons-material/SpaceBar";
-import ClearIcon from "@mui/icons-material/Clear";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 import MinimizeIcon from "@mui/icons-material/Minimize";
 import BackspaceIcon from "@mui/icons-material/Backspace";
