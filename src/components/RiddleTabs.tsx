@@ -2,8 +2,9 @@ import React, { useMemo } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
-import SearchPage from "./SearchPage";
-import LettersNumbers from "./LettersNumbers";
+import SearchPage from "../pages/SearchPage";
+import LettersNumbersPage from "../pages/LettersNumbersPage";
+import MorsePage from "../pages/MorsePage";
 
 const tabsConfig = [
   {
@@ -12,7 +13,11 @@ const tabsConfig = [
   },
   {
     tabName: "numberLetters",
-    tabContent: <LettersNumbers />,
+    tabContent: <LettersNumbersPage />,
+  },
+  {
+    tabName: "morse",
+    tabContent: <MorsePage />,
   },
 ];
 
@@ -37,6 +42,7 @@ const RiddleTabs = () => {
       >
         <Tab label="Search" id="search" />
         <Tab label="Numbers-Letters" id="numberLetters" />
+        <Tab label="Morse" id="morse" />
       </Tabs>
       {tabsConfig[tabIndex].tabContent}
     </>

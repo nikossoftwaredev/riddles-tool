@@ -7,7 +7,7 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-import RiddleTabs from "./pages/RiddleTabs";
+import RiddleTabs from "./components/RiddleTabs";
 
 const App = () => {
   return (
