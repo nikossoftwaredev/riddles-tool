@@ -16,7 +16,7 @@ const MorsePage = () => {
     setMorseText((prev) => `${prev}${mode}`);
     if (mode !== " ") {
       audio.current?.pause;
-      audio.current = new Audio(`assets/${mode}.mp3`);
+      audio.current = new Audio(`assets/${mode === "." ? "dot" : "dash"}.mp3`);
       audio.current?.play();
     }
   };
