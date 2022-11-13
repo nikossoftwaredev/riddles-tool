@@ -3,6 +3,7 @@ import { Stack, Grid, Button } from "@mui/material";
 import CopyText from "../components/CopyText";
 import { pigPenInfo } from "../data/letters";
 import ClearIcon from "@mui/icons-material/Clear";
+import PerfectScrollbar from "react-perfect-scrollbar";
 
 const PigPenPage = () => {
   const [text, setText] = useState("");
@@ -32,28 +33,34 @@ const PigPenPage = () => {
         <ClearIcon fontSize="small" />
       </Button>
       <CopyText text={text || "Type pigpen"} />
-      <Grid container spacing={5} justifyItems="stretch">
-        {pigPenInfo.map((info) => {
-          const { letter, sides, dotStyle, transform } = info;
-          const buttonStyle = sides.reduce((acc, side) => {
-            return { ...acc, [`border${side}`]: "5px solid black", transform };
-          }, {});
+      <PerfectScrollbar>
+        <Grid container spacing={5} justifyItems="stretch" sx={{ flexGrow: 1 }}>
+          {pigPenInfo.map((info) => {
+            const { letter, sides, dotStyle, transform } = info;
+            const buttonStyle = sides.reduce((acc, side) => {
+              return {
+                ...acc,
+                [`border${side}`]: "5px solid black",
+                transform,
+              };
+            }, {});
 
-          return (
-            <Grid key={letter} item xs={4}>
-              <button
-                className="pig-pen"
-                style={buttonStyle}
-                onClick={onClick(letter)}
-              >
-                {dotStyle && (
-                  <span className={`${letter} dot`} style={dotStyle}></span>
-                )}
-              </button>
-            </Grid>
-          );
-        })}
-      </Grid>
+            return (
+              <Grid key={letter} item xs={4}>
+                <button
+                  className="pig-pen"
+                  style={buttonStyle}
+                  onClick={onClick(letter)}
+                >
+                  {dotStyle && (
+                    <span className={`${letter} dot`} style={dotStyle}></span>
+                  )}
+                </button>
+              </Grid>
+            );
+          })}
+        </Grid>
+      </PerfectScrollbar>
     </Stack>
   );
 };
