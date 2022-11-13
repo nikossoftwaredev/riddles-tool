@@ -85,8 +85,8 @@ const SearchPage = () => {
   }, [searchFilters]);
 
   return (
-    <Stack height="100%">
-      <Stack style={{ height: "50%" }} gap={2} alignItems="center">
+    <>
+      <Stack gap={2} alignItems="center">
         <SearchFilters
           searchFilters={searchFilters}
           handleChange={handleChange}
@@ -102,7 +102,7 @@ const SearchPage = () => {
       </Stack>
       <PerfectScrollbar>
         {streets.length > 0 ? (
-          <List style={{ maxHeight: "200px" }}>
+          <List style={{ maxHeight: "200px", flexGrow: 1 }}>
             {streets.map((street) => (
               <ListItem
                 key={street}
@@ -122,7 +122,7 @@ const SearchPage = () => {
           </Typography>
         )}
       </PerfectScrollbar>
-    </Stack>
+    </>
   );
 };
 

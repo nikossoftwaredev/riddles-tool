@@ -1,10 +1,13 @@
-import React, { useMemo } from "react";
+import { useMemo } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import Tabs from "@mui/material/Tabs";
-import Tab from "@mui/material/Tab";
 import SearchPage from "../pages/SearchPage";
 import LettersNumbersPage from "../pages/LettersNumbersPage";
 import MorsePage from "../pages/MorsePage";
+import PigPenPage from "../pages/PigPenPage";
+import BottomNavigation from "@mui/material/BottomNavigation";
+import BottomNavigationAction from "@mui/material/BottomNavigationAction";
+import { Paper, Stack } from "@mui/material";
+import { Box } from "@mui/system";
 
 const tabsConfig = [
   {
@@ -19,6 +22,10 @@ const tabsConfig = [
     tabName: "morse",
     tabContent: <MorsePage />,
   },
+  {
+    tabName: "pig-pen",
+    tabContent: <PigPenPage />,
+  },
 ];
 
 const RiddleTabs = () => {
@@ -32,20 +39,31 @@ const RiddleTabs = () => {
   );
 
   return (
-    <>
-      <Tabs
-        variant="scrollable"
-        scrollButtons="auto"
-        value={tabIndex}
-        onChange={(e, newValue) => navigate(`/${tabsConfig[newValue].tabName}`)}
-        aria-label="basic tabs example"
-      >
-        <Tab label="Search" id="search" />
-        <Tab label="Numbers-Letters" id="numberLetters" />
-        <Tab label="Morse" id="morse" />
-      </Tabs>
-      {tabsConfig[tabIndex].tabContent}
-    </>
+    <Stack
+      gap={2}
+      sx={{ height: "100vh", width: "350px" }}
+      direction="column"
+      alignItems="center"
+      justifyContent="center"
+    >
+      <Box sx={{ height: "90%", p: 1, overflow: "auto" }}>
+        {tabsConfig[tabIndex].tabContent}
+      </Box>
+      <Paper sx={{ flexGrow: 1 }} elevation={3}>
+        <BottomNavigation
+          showLabels
+          value={tabIndex}
+          onChange={(e, newValue) =>
+            navigate(`/${tabsConfig[newValue].tabName}`)
+          }
+        >
+          <BottomNavigationAction label="Search" id="search" />
+          <BottomNavigationAction label="Numbers-Letters" id="numberLetters" />
+          <BottomNavigationAction label="Morse" id="morse" />
+          <BottomNavigationAction label="Pig Pen" id="pig-pen" />
+        </BottomNavigation>
+      </Paper>
+    </Stack>
   );
 };
 

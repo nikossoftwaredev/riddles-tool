@@ -11,24 +11,12 @@ import RiddleTabs from "./components/RiddleTabs";
 
 const App = () => {
   return (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        width: "100%",
-        height: "100vh",
-        margin: "0px",
-      }}
-    >
-      <Stack width="350px" gap={1} alignItems="center">
-        <Router>
-          <Routes>
-            <Route path="/:tabName" element={<RiddleTabs />}></Route>
-            <Route path="*" element={<Navigate to="/search" />}></Route>
-          </Routes>
-        </Router>
-      </Stack>
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/:tabName" element={<RiddleTabs />}></Route>
+        <Route path="*" element={<Navigate to="/search" />}></Route>
+      </Routes>
+    </Router>
   );
 };
 

@@ -24,11 +24,12 @@ const CopyText = ({ text = "", icon = "" }: CopyTextProps) => {
           p: 1,
           color: "black",
           width: "100%",
+          maxWidth: "100%",
         }}
         onClick={onCopy}
       >
         {icon && <img width="28px" src={icon} />}
-        <Typography sx={{ ml: 1 }}>{text}</Typography>
+        <Typography sx={{ ml: 1, wordBreak: "break-word" }}>{text}</Typography>
         <ContentCopyIcon sx={{ marginLeft: "auto" }} />
       </Button>
       <Snackbar
