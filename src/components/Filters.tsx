@@ -4,13 +4,11 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import { FormControlLabel, Radio, RadioGroup, TextField } from "@mui/material";
+import { ISearchFilters } from "../types/search";
+import { areaDataSets } from "../data/general";
 
 interface SearchFiltersProps {
-  searchFilters: {
-    searchTerm: string;
-    characters: number;
-    searchMode: string;
-  };
+  searchFilters: ISearchFilters;
   handleChange: (
     value: any,
     dataField: keyof SearchFiltersProps["searchFilters"]
@@ -21,6 +19,7 @@ const SearchFilters = ({ searchFilters, handleChange }: SearchFiltersProps) => {
     <>
       <FormControl>
         <RadioGroup
+          row
           aria-labelledby="demo-radio-buttons-group-label"
           defaultValue="search"
           name="radio-buttons-group"
@@ -31,11 +30,6 @@ const SearchFilters = ({ searchFilters, handleChange }: SearchFiltersProps) => {
             value="anagram"
             control={<Radio />}
             label="Anagram"
-          />
-          <FormControlLabel
-            value="contains"
-            control={<Radio />}
-            label="Contains"
           />
         </RadioGroup>
       </FormControl>
@@ -64,6 +58,23 @@ const SearchFilters = ({ searchFilters, handleChange }: SearchFiltersProps) => {
           {Array.from(Array(25).keys()).map((number) => (
             <MenuItem key={number} value={number}>
               {number ? number : "Unset"}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+      <FormControl fullWidth>
+        <InputLabel id="demo-simple-select-label">Data Set</InputLabel>
+        <Select
+          size="small"
+          value={searchFilters.dataset}
+          label="Data-set"
+          onChange={(e) => {
+            handleChange(e.target.value, "dataset");
+          }}
+        >
+          {Object.keys(areaDataSets).map((area) => (
+            <MenuItem key={area} value={area}>
+              {area}
             </MenuItem>
           ))}
         </Select>

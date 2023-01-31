@@ -1,6 +1,7 @@
 import { useCallback, useMemo, useState } from "react";
 import {
   Button,
+  colors,
   Divider,
   List,
   ListItem,
@@ -9,21 +10,25 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { MOSCHATO_STREETS } from "../data/moschato-streets";
+
 import DirectionsIcon from "@mui/icons-material/Directions";
 import SearchFilters from "../components/Filters";
 import wcmatch from "wildcard-match";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import { toGreek } from "greek-utils";
+import { ISearchFilters, LocationInfo } from "../types/search";
+import { areaDataSets } from "../data/general";
+import { highlightStringMatch } from "../utils/test";
 
-const defaultFilters = {
+const defaultFilters: ISearchFilters = {
   searchTerm: "",
   characters: 0,
   searchMode: "search",
+  dataset: "ΟΛΑ",
 };
 
 const showInMapClicked = (term: string) => {
-  window.open(`https://maps.google.com?q=ΜΟΣΧΑΤΟ ${term}`);
+  window.open(`https://maps.google.com?q=${term}`);
 };
 
 const SearchPage = () => {
@@ -36,49 +41,38 @@ const SearchPage = () => {
     }));
   }, []);
 
-  const streets = useMemo(() => {
-    let filteredStreets = MOSCHATO_STREETS;
+  const locationInfo: LocationInfo[] = useMemo(() => {
+    let filteredStreets = areaDataSets[searchFilters.dataset];
+
     let term = searchFilters.searchTerm.toLowerCase();
-    term = toGreek(term);
-    term = term.replaceAll(";", "?");
+    term = toGreek(term, "?");
+
+    if (searchFilters.characters > 0) {
+      filteredStreets = filteredStreets.filter(
+        ({ street }) => street.length === searchFilters.characters
+      );
+    }
 
     if (searchFilters.searchMode === "anagram") {
-      return filteredStreets.filter((word) => {
+      return filteredStreets.filter(({ street }) => {
         return (
-          word.toLowerCase().split("").sort().join("") ===
+          street.toLowerCase().split("").sort().join("") ===
           term.split("").sort().join("")
         );
       });
     }
 
-    if (searchFilters.searchMode === "contains") {
-      return filteredStreets.filter((word) => {
-        return term.split("").every((t) => word.toLowerCase().includes(t));
-      });
-    }
-
-    if (searchFilters.characters > 0) {
-      filteredStreets = filteredStreets.filter(
-        (street) => street.length === searchFilters.characters
-      );
-    }
-
     if (term.match(/\?|\*/g)) {
       const isMatch = wcmatch(term);
 
-      filteredStreets = filteredStreets.filter((street) =>
+      filteredStreets = filteredStreets.filter(({ street }) =>
         isMatch(street.toLowerCase())
       );
     } else if (term) {
-      filteredStreets = filteredStreets.filter((street) =>
-        street.toLowerCase().startsWith(term)
-      );
-
-      if (filteredStreets.length === 0) {
-        filteredStreets = MOSCHATO_STREETS.filter((street) =>
-          street.toLowerCase().includes(term)
-        );
-      }
+      filteredStreets = filteredStreets.filter(({ street }) => {
+        const rgx = new RegExp(term, "ig");
+        return rgx.test(street);
+      });
     }
 
     return filteredStreets;
@@ -101,24 +95,42 @@ const SearchPage = () => {
         </Button>
       </Stack>
       <PerfectScrollbar>
-        {streets.length > 0 ? (
+        {locationInfo.length > 0 ? (
           <List style={{ maxHeight: "200px", flexGrow: 1 }}>
-            {streets.map((street) => (
-              <ListItem
-                key={street}
-                style={{ borderBottom: "1px solid black" }}
-              >
-                <ListItemText primary={street} />
-                <Divider />
-                <ListItemIcon onClick={() => showInMapClicked(street)}>
-                  <DirectionsIcon />
-                </ListItemIcon>
-              </ListItem>
-            ))}
+            {locationInfo.map(({ street, town }) => {
+              const fullStreet = `${street} ${town}`;
+              return (
+                <ListItem
+                  key={fullStreet}
+                  style={{ borderBottom: "1px solid black" }}
+                  onClick={() => showInMapClicked(fullStreet)}
+                  sx={{
+                    cursor: "pointer",
+                    "&:hover": { backgroundColor: colors.blue[600] },
+                  }}
+                >
+                  <Typography>
+                    <div
+                      dangerouslySetInnerHTML={{
+                        __html: highlightStringMatch(
+                          fullStreet,
+                          searchFilters.searchTerm
+                        ),
+                      }}
+                    />
+                  </Typography>
+                  <Divider />
+                  <ListItemIcon sx={{ ml: "auto" }}>
+                    <DirectionsIcon />
+                  </ListItemIcon>
+                </ListItem>
+              );
+            })}
           </List>
         ) : (
-          <Typography align="center">
-            🧠 Something wrong 🤓... No results found 😭
+          <Typography align="left" sx={{ mt: 2 }}>
+            🧠 Something went wrong... <br />
+            😭 No results found
           </Typography>
         )}
       </PerfectScrollbar>
