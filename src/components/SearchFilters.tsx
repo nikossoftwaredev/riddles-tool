@@ -1,16 +1,22 @@
-import React from "react";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-import { FormControlLabel, Radio, RadioGroup, TextField } from "@mui/material";
+import {
+  FormControlLabel,
+  InputAdornment,
+  Radio,
+  RadioGroup,
+  TextField,
+} from "@mui/material";
 import { ISearchFilters } from "../types/search";
 import { areaDataSets } from "../data/general";
+import HintPopover from "./HintPopover";
 
 interface SearchFiltersProps {
   searchFilters: ISearchFilters;
   handleChange: (
-    value: any,
+    value: ISearchFilters[typeof dataField],
     dataField: keyof SearchFiltersProps["searchFilters"]
   ) => void;
 }
@@ -42,6 +48,13 @@ const SearchFilters = ({ searchFilters, handleChange }: SearchFiltersProps) => {
         id="outlined-basic"
         label="Search..."
         variant="outlined"
+        InputProps={{
+          endAdornment: (
+            <InputAdornment position="end">
+              <HintPopover />
+            </InputAdornment>
+          ),
+        }}
       />
       <FormControl fullWidth>
         <InputLabel id="demo-simple-select-label">Characters</InputLabel>

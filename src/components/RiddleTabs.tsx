@@ -8,23 +8,33 @@ import BottomNavigation from "@mui/material/BottomNavigation";
 import BottomNavigationAction from "@mui/material/BottomNavigationAction";
 import { Paper, Stack } from "@mui/material";
 import { Box } from "@mui/system";
+import MendeleevPage from "../pages/MendeleevPage";
 
 const tabsConfig = [
   {
-    tabName: "search",
+    id: "search",
     tabContent: <SearchPage />,
+    label: "Search",
   },
   {
-    tabName: "numberLetters",
+    id: "Letters-Numbers",
     tabContent: <LettersNumbersPage />,
+    label: "Morse",
   },
   {
-    tabName: "morse",
+    id: "mendeleev",
+    tabContent: <MendeleevPage />,
+    label: "Mendeleev",
+  },
+  {
+    id: "morse",
     tabContent: <MorsePage />,
+    label: "Morse",
   },
   {
-    tabName: "pig-pen",
+    id: "pig-pen",
     tabContent: <PigPenPage />,
+    label: "Pig Pen",
   },
 ];
 
@@ -34,7 +44,7 @@ const RiddleTabs = () => {
   const { tabName = "search" } = useParams();
 
   const tabIndex = useMemo(
-    () => tabsConfig.findIndex((tab) => tab.tabName === tabName),
+    () => tabsConfig.findIndex((tab) => tab.id === tabName),
     [tabName]
   );
 
@@ -53,14 +63,11 @@ const RiddleTabs = () => {
         <BottomNavigation
           showLabels
           value={tabIndex}
-          onChange={(e, newValue) =>
-            navigate(`/${tabsConfig[newValue].tabName}`)
-          }
+          onChange={(e, newValue) => navigate(`/${tabsConfig[newValue].id}`)}
         >
-          <BottomNavigationAction label="Search" id="search" />
-          <BottomNavigationAction label="Numbers-Letters" id="numberLetters" />
-          <BottomNavigationAction label="Morse" id="morse" />
-          <BottomNavigationAction label="Pig Pen" id="pig-pen" />
+          {tabsConfig.map(({ id, label }) => (
+            <BottomNavigationAction key={id} label={label} id={id} />
+          ))}
         </BottomNavigation>
       </Paper>
     </Stack>

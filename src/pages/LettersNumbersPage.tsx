@@ -4,10 +4,9 @@ import {
   Box,
   TextField,
   InputAdornment,
+  colors,
 } from "@mui/material";
 import CompareArrowsIcon from "@mui/icons-material/CompareArrows";
-import Snackbar from "@mui/material/Snackbar";
-import MuiAlert from "@mui/material/Alert";
 import { useMemo, useState } from "react";
 import { englishLetters, greekLetters } from "../data/letters";
 import ClearIcon from "@mui/icons-material/Clear";
@@ -24,7 +23,6 @@ const LettersNumbersPage = () => {
   });
 
   const [text, setText] = useState("");
-  const [showSnackbar, setShowSnackbar] = useState(false);
 
   const onToggleMode = () => {
     if (mode.from === "Numbers") {
@@ -35,11 +33,12 @@ const LettersNumbersPage = () => {
   };
 
   const { greek, english } = useMemo(() => {
+    if (text === "") return { greek: "", english: "" };
     let greek: number[] | string[] = [];
     let english: number[] | string[] = [];
 
     if (mode.from === "Letters") {
-      const textArray = text.split("");
+      const textArray = text.toLowerCase().split("");
       greek = textArray
         .map((letter: string) => greekLetters.indexOf(letter) + 1)
         .filter((letter: number) => letter > 0);
@@ -51,11 +50,11 @@ const LettersNumbersPage = () => {
       const textArray = text.split(/ /);
 
       greek = textArray.map(
-        (number: string) => greekLetters[parseInt(number) - 1]
+        (number: string) => greekLetters[parseInt(number) - 1] || "-"
       );
 
       english = textArray.map(
-        (number: string) => englishLetters[parseInt(number) - 1]
+        (number: string) => englishLetters[parseInt(number) - 1] || "-"
       );
     }
 
@@ -73,7 +72,7 @@ const LettersNumbersPage = () => {
         alignItems="center"
         gap={2}
       >
-        <Box sx={{ flex: 0.3 }}>{mode.from}</Box>
+        <Box sx={{ flex: 0.3, color: colors.green[500] }}>{mode.from}</Box>
         <IconButton sx={{ flex: 0.3 }} onClick={onToggleMode}>
           <CompareArrowsIcon />
         </IconButton>
@@ -95,7 +94,6 @@ const LettersNumbersPage = () => {
           ),
         }}
       />
-
       {["gr", "en"].map((language) => (
         <CopyText
           key={language}
@@ -103,21 +101,6 @@ const LettersNumbersPage = () => {
           icon={`assets/${language}.svg`}
         />
       ))}
-
-      <Snackbar
-        open={showSnackbar}
-        autoHideDuration={1500}
-        onClose={() => setShowSnackbar(false)}
-      >
-        <MuiAlert
-          elevation={6}
-          variant="filled"
-          onClose={() => setShowSnackbar(false)}
-          severity="success"
-        >
-          Copied successfully
-        </MuiAlert>
-      </Snackbar>
     </Stack>
   );
 };

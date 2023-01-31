@@ -6,13 +6,12 @@ import {
   List,
   ListItem,
   ListItemIcon,
-  ListItemText,
   Stack,
   Typography,
 } from "@mui/material";
 
 import DirectionsIcon from "@mui/icons-material/Directions";
-import SearchFilters from "../components/Filters";
+import SearchFilters from "../components/SearchFilters";
 import wcmatch from "wildcard-match";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import { toGreek } from "greek-utils";
@@ -110,7 +109,7 @@ const SearchPage = () => {
                   }}
                 >
                   <Typography>
-                    <div
+                    <span
                       dangerouslySetInnerHTML={{
                         __html: highlightStringMatch(
                           fullStreet,
