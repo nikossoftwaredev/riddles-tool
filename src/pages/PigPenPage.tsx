@@ -4,6 +4,7 @@ import CopyText from "../components/CopyText";
 import { pigPenInfo } from "../data/letters";
 import ClearIcon from "@mui/icons-material/Clear";
 import PerfectScrollbar from "react-perfect-scrollbar";
+import BackspaceIcon from "@mui/icons-material/Backspace";
 
 const PigPenPage = () => {
   const [text, setText] = useState("");
@@ -19,19 +20,48 @@ const PigPenPage = () => {
       direction="column"
       alignItems="center"
     >
-      <Button
-        variant="contained"
-        color="error"
-        sx={{ width: "100%", justifyContent: "center" }}
-        disabled={text.length === 0}
-        onClick={() => {
-          setText("");
-        }}
-        aria-label="delete"
-      >
-        Clear
-        <ClearIcon fontSize="small" />
-      </Button>
+      <Grid container spacing={2} justifyItems="stretch">
+        <Grid item xs={6}>
+          <Button
+            variant="contained"
+            color="error"
+            sx={{
+              width: "100%",
+              justifyContent: "center",
+              alignItems: "center",
+              gap: "4px",
+            }}
+            disabled={text.length === 0}
+            onClick={() => {
+              setText("");
+            }}
+            aria-label="delete"
+          >
+            Clear
+            <ClearIcon fontSize="small" />
+          </Button>
+        </Grid>
+        <Grid item xs={6}>
+          <Button
+            variant="contained"
+            sx={{
+              width: "100%",
+              justifyContent: "center",
+              alignItems: "center",
+              gap: "4px",
+            }}
+            disabled={text.length === 0}
+            onClick={() => {
+              setText((prev) => prev.slice(0, -1));
+            }}
+            aria-label="delete"
+          >
+            Delete
+            <BackspaceIcon fontSize="small" />
+          </Button>
+        </Grid>
+      </Grid>
+
       <CopyText text={text || "Type pigpen"} />
       <PerfectScrollbar>
         <Grid container spacing={5} justifyItems="stretch" sx={{ flexGrow: 1 }}>

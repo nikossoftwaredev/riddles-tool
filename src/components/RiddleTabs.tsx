@@ -9,22 +9,25 @@ import BottomNavigationAction from "@mui/material/BottomNavigationAction";
 import { Paper, Stack } from "@mui/material";
 import { Box } from "@mui/system";
 import MendeleevPage from "../pages/MendeleevPage";
+import SearchIcon from "@mui/icons-material/Search";
+import SavingsIcon from "@mui/icons-material/Savings";
+import IconWrapper from "./IconWrapper";
 
 const tabsConfig = [
   {
     id: "search",
     tabContent: <SearchPage />,
-    label: "Search",
+    icon: <SearchIcon />,
   },
   {
     id: "Letters-Numbers",
     tabContent: <LettersNumbersPage />,
-    label: "Morse",
+    label: "A-Z_0-9",
   },
   {
     id: "mendeleev",
     tabContent: <MendeleevPage />,
-    label: "Mendeleev",
+    icon: <IconWrapper src="assets/pt.svg" />,
   },
   {
     id: "morse",
@@ -34,7 +37,7 @@ const tabsConfig = [
   {
     id: "pig-pen",
     tabContent: <PigPenPage />,
-    label: "Pig Pen",
+    icon: <SavingsIcon />,
   },
 ];
 
@@ -65,8 +68,13 @@ const RiddleTabs = () => {
           value={tabIndex}
           onChange={(e, newValue) => navigate(`/${tabsConfig[newValue].id}`)}
         >
-          {tabsConfig.map(({ id, label }) => (
-            <BottomNavigationAction key={id} label={label} id={id} />
+          {tabsConfig.map(({ id, label, icon }) => (
+            <BottomNavigationAction
+              key={id}
+              label={label}
+              id={id}
+              icon={icon}
+            />
           ))}
         </BottomNavigation>
       </Paper>
