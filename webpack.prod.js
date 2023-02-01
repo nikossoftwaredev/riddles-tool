@@ -1,12 +1,23 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const webpack = require("webpack");
 const path = require("path");
+const dotenv = require("dotenv");
 const CopyPlugin = require("copy-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
+const SpeedMeasurePlugin = require("speed-measure-webpack-plugin");
+const CompressionPlugin = require("compression-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const WorkboxWebpackPlugin = require("workbox-webpack-plugin");
+
+const smp = new SpeedMeasurePlugin();
+
+dotenv.config({ path: ".env" });
+
+const shouldBundleAnalyze = process.env.BUNDLE_ANALYZE === "true";
+const shouldBundleTimer = process.env.BUNDLE_TIMER === "true";
 
 module.exports = (env, argv) => {
   const config = {
@@ -21,7 +32,9 @@ module.exports = (env, argv) => {
       publicPath: "/"
     },
     optimization: {
+      // --- 111111 --- 111111 --- 111111 --- 111111 --- 111111 ---
       minimize: true,
+      // moduleIds: 'deterministic',
       runtimeChunk: {
         name: entrypoint => `runtime-${entrypoint.name}`
       },
@@ -51,13 +64,21 @@ module.exports = (env, argv) => {
           }
         ]
       }),
+      shouldBundleAnalyze && new BundleAnalyzerPlugin(),
+      new webpack.DefinePlugin({
+        "process.env": JSON.stringify(process.env)
+      }),
+      new webpack.ProvidePlugin({
+        process: "process/browser",
+        Buffer: ["buffer", "Buffer"]
+      }),
       new CleanWebpackPlugin(),
       new HtmlWebpackPlugin({
         title: "Caching",
         inject: true,
-        template: `${__dirname}/public/index.html`,
-        filename: `${__dirname}/index.html`,
-        favicon: `${__dirname}/public/favicon.svg`,
+        template: "./public/index.html",
+        filename: "./index.html",
+        favicon: "./public/favicon.svg",
         minify: {
           removeComments: true,
           collapseWhitespace: true,
@@ -92,6 +113,7 @@ module.exports = (env, argv) => {
       new CopyPlugin({
         patterns: [{ context: "public/", from: "assets/**/*", to: "./" }]
       }),
+      new CompressionPlugin(),
       new webpack.optimize.SplitChunksPlugin(),
       new webpack.optimize.AggressiveMergingPlugin(),
       new MiniCssExtractPlugin({
@@ -174,6 +196,8 @@ module.exports = (env, argv) => {
       }
     }
   };
+
+  if (shouldBundleTimer) return smp.wrap(config);
 
   return config;
 };
