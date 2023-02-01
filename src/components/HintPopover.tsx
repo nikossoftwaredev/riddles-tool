@@ -1,14 +1,8 @@
-import * as React from "react";
-import Typography from "@mui/material/Typography";
-import {
-  colors,
-  Dialog,
-  DialogContent,
-  DialogTitle,
-  IconButton,
-} from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
-import InfoIcon from "@mui/icons-material/Info";
+import * as React from 'react';
+import Typography from '@mui/material/Typography';
+import { colors, Dialog, DialogContent, DialogTitle, IconButton } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
+import InfoIcon from '@mui/icons-material/Info';
 
 const HintPopover = () => {
   const [open, setOpen] = React.useState(false);
@@ -30,13 +24,13 @@ const HintPopover = () => {
         <DialogTitle sx={{ color: colors.green[500] }}>
           <Typography>Advanced search options:</Typography>
           <IconButton
-            aria-label="close"
+            aria-label='close'
             onClick={handleClose}
             sx={{
-              position: "absolute",
+              position: 'absolute',
               right: 8,
               top: 8,
-              color: (theme) => theme.palette.grey[500],
+              color: theme => theme.palette.grey[500]
             }}
           >
             <CloseIcon />

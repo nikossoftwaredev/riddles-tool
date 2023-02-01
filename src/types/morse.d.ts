@@ -1,1 +1,1 @@
-declare module "morse";
+declare module 'morse';

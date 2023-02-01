@@ -36,16 +36,14 @@
     ],
     "strictPropertyInitialization": false,
     "outDir": "./dist/",
-    "typeRoots": [
-      "./types",
-      "./node_modules/@types"
-    ]
   },
   "exclude": [
     "node_modules"
   ],
   "include": [
     "src",
-    "webpack.config.js"
+    "webpack.dev.js",
+    "webpack.prod.js",
+    "webpack.dev.js"
   ]
 }

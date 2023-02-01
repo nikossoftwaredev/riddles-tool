@@ -1,28 +1,20 @@
-import { useCallback, useMemo, useRef, useState } from "react";
-import {
-  Button,
-  colors,
-  Divider,
-  ListItem,
-  ListItemIcon,
-  Stack,
-  Typography,
-} from "@mui/material";
+import { useCallback, useMemo, useRef, useState } from 'react';
+import { Button, colors, Divider, ListItem, ListItemIcon, Stack, Typography } from '@mui/material';
 
-import DirectionsIcon from "@mui/icons-material/Directions";
-import SearchFilters from "../components/SearchFilters";
-import wcmatch from "wildcard-match";
-import { toGreek } from "greek-utils";
-import { ISearchFilters, LocationInfo } from "../types/search";
-import { areaDataSets } from "../data/general";
-import { highlightStringMatch } from "../utils/test";
-import OptimizedList from "../components/OptimizedList";
+import DirectionsIcon from '@mui/icons-material/Directions';
+import wcmatch from 'wildcard-match';
+import { toGreek } from 'greek-utils';
+import { ISearchFilters, LocationInfo } from 'types/search';
+import { areaDataSets } from 'data/general';
+import { highlightStringMatch } from 'utils/test';
+import OptimizedList from 'components/OptimizedList';
+import SearchFilters from 'components/SearchFilters';
 
 const defaultFilters: ISearchFilters = {
-  searchTerm: "",
+  searchTerm: '',
   characters: 0,
-  searchMode: "search",
-  dataset: "ΟΛΑ",
+  searchMode: 'search',
+  dataset: 'ΟΛΑ'
 };
 
 const showInMapClicked = (term: string) => {
@@ -33,7 +25,7 @@ const threshold = 50;
 
 const MyList = ({
   items,
-  searchTerm,
+  searchTerm
 }: {
   items: LocationInfo[];
   searchTerm: string;
@@ -44,22 +36,22 @@ const MyList = ({
       return (
         <ListItem
           key={fullStreet}
-          style={{ borderBottom: "1px solid black" }}
+          style={{ borderBottom: '1px solid black' }}
           onClick={() => showInMapClicked(fullStreet)}
           sx={{
-            cursor: "pointer",
-            "&:hover": { backgroundColor: colors.blue[600] },
+            cursor: 'pointer',
+            '&:hover': { backgroundColor: colors.blue[600] }
           }}
         >
           <Typography>
             <span
               dangerouslySetInnerHTML={{
-                __html: highlightStringMatch(fullStreet, searchTerm),
+                __html: highlightStringMatch(fullStreet, searchTerm)
               }}
             />
           </Typography>
           <Divider />
-          <ListItemIcon sx={{ ml: "auto" }}>
+          <ListItemIcon sx={{ ml: 'auto' }}>
             <DirectionsIcon />
           </ListItemIcon>
         </ListItem>
@@ -76,9 +68,9 @@ const SearchPage = () => {
   const [displayInfo, setDisplayInfo] = useState<LocationInfo[]>([]);
 
   const handleChange = useCallback((value: any, dataField: string) => {
-    setSearchFilters((prev) => ({
+    setSearchFilters(prev => ({
       ...prev,
-      [dataField]: value,
+      [dataField]: value
     }));
   }, []);
 
@@ -86,7 +78,7 @@ const SearchPage = () => {
     let filteredStreets = areaDataSets[searchFilters.dataset];
 
     let term = searchFilters.searchTerm.toLowerCase();
-    term = toGreek(term, "?");
+    term = toGreek(term, '?');
 
     if (searchFilters.characters > 0) {
       filteredStreets = filteredStreets.filter(
@@ -94,23 +86,20 @@ const SearchPage = () => {
       );
     }
 
-    if (searchFilters.searchMode === "anagram") {
+    if (searchFilters.searchMode === 'anagram') {
       return filteredStreets.filter(
         ({ street }) =>
-          street.toLowerCase().split("").sort().join("") ===
-          term.split("").sort().join("")
+          street.toLowerCase().split('').sort().join('') === term.split('').sort().join('')
       );
     }
 
     if (term.match(/\?|\*/g)) {
       const isMatch = wcmatch(term);
 
-      filteredStreets = filteredStreets.filter(({ street }) =>
-        isMatch(street.toLowerCase())
-      );
+      filteredStreets = filteredStreets.filter(({ street }) => isMatch(street.toLowerCase()));
     } else if (term) {
       filteredStreets = filteredStreets.filter(({ street }) => {
-        const rgx = new RegExp(term, "ig");
+        const rgx = new RegExp(term, 'ig');
         return rgx.test(street);
       });
     }
@@ -130,15 +119,12 @@ const SearchPage = () => {
 
   return (
     <>
-      <Stack gap={2} alignItems="center">
-        <SearchFilters
-          searchFilters={searchFilters}
-          handleChange={handleChange}
-        />
+      <Stack gap={2} alignItems='center'>
+        <SearchFilters searchFilters={searchFilters} handleChange={handleChange} />
         <Button
-          style={{ width: "160px", marginBottom: "8px" }}
-          variant="contained"
-          color="primary"
+          style={{ width: '160px', marginBottom: '8px' }}
+          variant='contained'
+          color='primary'
           onClick={() => setSearchFilters(defaultFilters)}
         >
           Clear Filters
@@ -147,16 +133,14 @@ const SearchPage = () => {
 
       {displayInfo.length > 0 ? (
         <OptimizedList
-          style={{ maxHeight: "450px" }}
+          style={{ maxHeight: '450px' }}
           hasMore={displayInfo.length <= locationInfo.length}
           loadMore={loadMore}
           items={displayInfo}
-          renderItems={(items) => (
-            <MyList items={items} searchTerm={searchFilters.searchTerm} />
-          )}
+          renderItems={items => <MyList items={items} searchTerm={searchFilters.searchTerm} />}
         />
       ) : (
-        <Typography align="left" sx={{ mt: 2 }}>
+        <Typography align='left' sx={{ mt: 2 }}>
           🧠 Something went wrong... <br />
           😭 No results found
         </Typography>

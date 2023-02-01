@@ -1,6 +1,6 @@
-export type IDataSet = "ΡΕΝΤΗΣ" | "ΝΙΚΑΙΑ" | "ΜΟΣΧΑΤΟ" | "ΟΛΑ";
+export type IDataSet = 'ΡΕΝΤΗΣ' | 'ΝΙΚΑΙΑ' | 'ΜΟΣΧΑΤΟ' | 'ΟΛΑ';
 export interface LocationInfo {
-  town: "ΡΕΝΤΗΣ" | "ΝΙΚΑΙΑ" | "ΜΟΣΧΑΤΟ";
+  town: 'ΡΕΝΤΗΣ' | 'ΝΙΚΑΙΑ' | 'ΜΟΣΧΑΤΟ';
   street: string;
 }
 export interface ISearchFilters {

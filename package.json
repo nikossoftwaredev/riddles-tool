@@ -4,8 +4,8 @@
   "private": true,
   "version": "0.0.0",
   "scripts": {
-    "start": "webpack serve --mode development",
-    "build": "webpack --mode production",
+    "start": "webpack serve --config webpack.dev.js",
+    "build": "webpack --config webpack.prod.js",
     "serve": "serve -s dist",
     "clear-install": "rm -rf node_modules/ yarn.lock && yarn install"
   },
@@ -38,6 +38,8 @@
     "@typescript-eslint/eslint-plugin": "^5.50.0",
     "@typescript-eslint/parser": "^5.50.0",
     "babel-loader": "^9.1.2",
+    "clean-webpack-plugin": "^4.0.0",
+    "copy-webpack-plugin": "^11.0.0",
     "core-js": "^3.27.2",
     "css-loader": "^6.7.3",
     "eslint": "^8.33.0",

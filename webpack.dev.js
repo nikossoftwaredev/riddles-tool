@@ -6,9 +6,6 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const WorkboxWebpackPlugin = require("workbox-webpack-plugin");
 
 module.exports = (env, argv) => {
-  const isProd = argv.mode === "production";
-  const isDev = !isProd;
-
   const devServer = {
     open: true,
     historyApiFallback: true,
@@ -19,12 +16,12 @@ module.exports = (env, argv) => {
       progress: true,
       overlay: {
         errors: true,
-        warnings: false,
-      },
+        warnings: false
+      }
     },
     static: {
-      directory: path.join(__dirname, "public"),
-    },
+      directory: path.join(__dirname, "public")
+    }
   };
 
   const config = {
@@ -33,10 +30,10 @@ module.exports = (env, argv) => {
     output: {
       path: path.resolve(__dirname, "dist"),
       filename: "index.js",
-      publicPath: '/',
+      publicPath: "/"
     },
-    ...(isDev ? { devServer } : {}),
-    ...(isDev ? { devtool: "cheap-module-source-map" } : {}),
+    devServer,
+    devtool: "cheap-module-source-map",
     module: {
       rules: [
         {
@@ -44,21 +41,21 @@ module.exports = (env, argv) => {
           exclude: /node_modules/,
           include: path.resolve(__dirname, "src"),
           use: {
-            loader: "babel-loader",
-          },
+            loader: "babel-loader"
+          }
         },
         {
           test: /.(ts|tsx)?$/,
           exclude: /node_modules/,
           include: path.resolve(__dirname, "src"),
-          use: [{ loader: "ts-loader", options: { transpileOnly: true } }],
+          use: [{ loader: "ts-loader", options: { transpileOnly: true } }]
         },
         {
           test: /\.css$/,
           use: [
-            require.resolve('style-loader'),
+            require.resolve("style-loader"),
             {
-              loader: require.resolve('css-loader'),
+              loader: require.resolve("css-loader"),
               options: {
                 url: false
               }
@@ -70,24 +67,24 @@ module.exports = (env, argv) => {
           test: /\.s[ac]ss$/i,
           use: [
             // fallback to style-loader in development
-            isDev ? "style-loader" : MiniCssExtractPlugin.loader,
+            "style-loader",
             "css-loader",
-            "sass-loader",
-          ],
+            "sass-loader"
+          ]
         },
         {
           test: /\.(png|jpe?g|gif|svg)$/i,
           exclude: [/\.(js|mjs|jsx|ts|tsx)$/, /\.html$/, /\.json$/],
           use: [
             {
-              loader: 'file-loader'
+              loader: "file-loader"
             },
             {
-              loader: 'url-loader'
+              loader: "url-loader"
             }
           ]
-        },
-      ],
+        }
+      ]
     },
     plugins: [
       new WorkboxWebpackPlugin.GenerateSW({
@@ -95,55 +92,39 @@ module.exports = (env, argv) => {
         skipWaiting: true,
         runtimeCaching: [
           {
-            urlPattern: new RegExp('.*'),
-            handler: 'CacheFirst',
+            urlPattern: new RegExp(".*"),
+            handler: "CacheFirst",
             options: {
-              cacheName: 'cache-every-file'
+              cacheName: "cache-every-file"
             }
           }
         ]
       }),
       new ForkTsCheckerWebpackPlugin({
-        async: isDev,
+        async: true,
         typescript: {
-          configFile: path.resolve(__dirname, "tsconfig.json"),
-        },
+          configFile: path.resolve(__dirname, "tsconfig.json")
+        }
       }),
       new HtmlWebpackPlugin({
         title: "Caching",
         inject: true,
         template: `${__dirname}/public/index.html`,
         filename: `${__dirname}/index.html`,
-        favicon: `${__dirname}/public/favicon.svg`,
-        ...(isProd
-          ? {
-              minify: {
-                removeComments: true,
-                collapseWhitespace: true,
-                removeRedundantAttributes: true,
-                useShortDoctype: true,
-                removeEmptyAttributes: true,
-                removeStyleLinkTypeAttributes: true,
-                keepClosingSlash: true,
-                minifyJS: true,
-                minifyCSS: true,
-                minifyURLs: true,
-              },
-            }
-          : {}),
-      }),
+        favicon: `${__dirname}/public/favicon.svg`
+      })
     ],
     resolve: {
-      extensions: [".tsx", ".ts", ".js", ".jsx", ".css", '.scss',".json"],
+      extensions: [".tsx", ".ts", ".js", ".jsx", ".css", ".scss", ".json"],
       modules: [path.resolve(__dirname, "./src"), "node_modules"],
       alias: {
         components: path.resolve(__dirname, "./src/components"),
         pages: path.resolve(__dirname, "./src/pages"),
         data: path.resolve(__dirname, "./src/data"),
         types: path.resolve(__dirname, "./src/types"),
-        utils: path.resolve(__dirname, "./src/utils"),
-      },
-    },
+        utils: path.resolve(__dirname, "./src/utils")
+      }
+    }
   };
 
   return config;
