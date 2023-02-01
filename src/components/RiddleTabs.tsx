@@ -54,12 +54,12 @@ const RiddleTabs = () => {
   return (
     <Stack
       gap={2}
-      sx={{ height: "90vh", width: "350px" }}
+      sx={{ height: "100vh", maxHeight: "100vh", width: "350px" }}
       direction="column"
       alignItems="center"
       justifyContent="center"
     >
-      <Box sx={{ height: "90%", p: 1, overflow: "auto" }}>
+      <Box sx={{ height: "90%", overflow: "auto" }}>
         {tabsConfig[tabIndex].tabContent}
       </Box>
       <Paper sx={{ flexGrow: 1 }} elevation={3}>
