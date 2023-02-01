@@ -1,27 +1,101 @@
 {
   "env": {
+    "es6": true,
     "browser": true,
-    "es2021": true
+    "node": true
   },
+  "plugins": [
+    "eslint-plugin-import",
+    "eslint-plugin-jsx-a11y",
+    "eslint-plugin-prettier",
+    "eslint-plugin-react",
+    "eslint-plugin-react-hooks",
+    "eslint-plugin-no-relative-import-paths",
+    "@typescript-eslint"
+  ],
   "extends": [
     "eslint:recommended",
+    "airbnb",
+    "airbnb-typescript",
     "plugin:react/recommended",
-    "plugin:@typescript-eslint/recommended"
+    "plugin:@typescript-eslint/recommended",
+    "prettier",
+    "plugin:prettier/recommended"
   ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
-    "ecmaFeatures": {
-      "jsx": true
-    },
     "ecmaVersion": "latest",
-    "sourceType": "module"
+    "sourceType": "module",
+    "project": "./tsconfig.json"
   },
-  "plugins": ["react", "@typescript-eslint", "react-hooks"],
   "rules": {
     "react/react-in-jsx-scope": "off",
+    "@typescript-eslint/explicit-function-return-type": "off",
+    "import/prefer-default-export": "off",
+    "import/no-unresolved": "off",
+    "no-debugger": "error",
+    "no-console": "error",
+    "no-unused-vars": "off",
+    // Camelcase will become error and not warn
+    "camelcase": "off",
+    "@typescript-eslint/camelcase": ["off"],
+    "@typescript-eslint/no-unused-vars": ["error"],
+    "no-use-before-define": "off",
+    "@typescript-eslint/no-use-before-define": ["error"],
+    "no-shadow": "off",
+    "@typescript-eslint/no-shadow": ["error"],
+    "import/extensions": [
+      "error",
+      "ignorePackages",
+      {
+        "js": "never",
+        "jsx": "never",
+        "ts": "never",
+        "tsx": "never",
+        "css": "always",
+        "scss": "always"
+      }
+    ],
+    "react/jsx-filename-extension": [
+      1,
+      {
+        "extensions": [".js", ".ts", ".jsx", "tsx"]
+      }
+    ],
+    "max-len": [
+      "warn",
+      {
+        "code": 140
+      }
+    ],
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
     "react/prop-types": "off", // Since we do not use prop-types
-    "react/require-default-props": "off" // Since we do not use prop-types,
-  }
+    "react/require-default-props": "off", // Since we do not use prop-types,
+    "react/jsx-props-no-spreading": "off",
+    "no-relative-import-paths/no-relative-import-paths": [
+      "warn",
+      {
+        "allowSameFolder": true,
+        "rootDir": "src"
+      }
+    ],
+    "react/function-component-definition": [
+      2,
+      {
+        "namedComponents": "arrow-function",
+        "unnamedComponents": "arrow-function"
+      }
+    ]
+  },
+  "overrides": [
+    {
+      // enable the rule specifically for TypeScript files
+      "files": ["*.ts"],
+      "rules": {
+        "@typescript-eslint/explicit-function-return-type": ["error"],
+        "react/react-in-jsx-scope": "off"
+      }
+    }
+  ]
 }

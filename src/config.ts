@@ -1,2 +1,1 @@
-export const baseUrl =
-  import.meta.env.MODE === "development" ? "http://localhost:4000/api" : "/api";
+export const baseUrl = process.env.mode === 'development' ? 'http://localhost:4000/api' : '/api';
