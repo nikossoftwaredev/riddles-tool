@@ -18,8 +18,6 @@ const OptimizedList: React.FC<OptimizedListProps> = ({
 }) => {
   const scrollRef = useRef<HTMLElement>();
 
-  console.log({ items: items.length });
-
   useEffect(() => {
     const handleScroll = () => {
       if (!scrollRef.current) return;
