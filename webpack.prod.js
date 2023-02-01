@@ -140,26 +140,21 @@ module.exports = (env, argv) => {
         {
           test: /\.css$/,
           use: [
-            {
-              loader: MiniCssExtractPlugin.loader,
-              // css is located in `static/css`, use '../../' to locate index.html folder
-              // in production `paths.publicUrlOrPath` can be a relative path
-              options: { publicPath: "../../" }
-            },
+            require.resolve("style-loader"),
             {
               loader: require.resolve("css-loader"),
               options: {
                 url: false
               }
             }
-          ],
+          ].filter(Boolean),
           sideEffects: true
         },
         {
           test: /\.s[ac]ss$/i,
           use: [
             // fallback to style-loader in development
-            MiniCssExtractPlugin.loader,
+            "style-loader",
             "css-loader",
             "sass-loader"
           ]
