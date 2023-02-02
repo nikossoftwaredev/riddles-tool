@@ -1,20 +1,20 @@
-import { useCallback, useMemo, useRef, useState } from 'react';
-import { Button, colors, Divider, ListItem, ListItemIcon, Stack, Typography } from '@mui/material';
+import { useCallback, useMemo, useRef, useState } from "react";
+import { Button, colors, Divider, ListItem, ListItemIcon, Stack, Typography } from "@mui/material";
 
-import DirectionsIcon from '@mui/icons-material/Directions';
-import wcmatch from 'wildcard-match';
-import { toGreek } from 'greek-utils';
-import { ISearchFilters, LocationInfo } from 'types/search';
-import { areaDataSets } from 'data/general';
-import { highlightStringMatch } from 'utils/test';
-import OptimizedList from 'components/OptimizedList';
-import SearchFilters from 'components/SearchFilters';
+import DirectionsIcon from "@mui/icons-material/Directions";
+import wcmatch from "wildcard-match";
+import { toGreek } from "greek-utils";
+import { ISearchFilters, LocationInfo } from "types/search";
+import { areaDataSets } from "data/general";
+import { highlightStringMatch } from "utils/test";
+import OptimizedList from "components/OptimizedList";
+import SearchFilters from "components/SearchFilters";
 
 const defaultFilters: ISearchFilters = {
-  searchTerm: '',
+  searchTerm: "",
   characters: 0,
-  searchMode: 'search',
-  dataset: 'ΟΛΑ'
+  searchMode: "search",
+  dataset: "ΟΛΑ"
 };
 
 const showInMapClicked = (term: string) => {
@@ -36,11 +36,11 @@ const MyList = ({
       return (
         <ListItem
           key={fullStreet}
-          style={{ borderBottom: '1px solid black' }}
+          style={{ borderBottom: "1px solid black" }}
           onClick={() => showInMapClicked(fullStreet)}
           sx={{
-            cursor: 'pointer',
-            '&:hover': { backgroundColor: colors.blue[600] }
+            cursor: "pointer",
+            "&:hover": { backgroundColor: colors.blue[600] }
           }}
         >
           <Typography>
@@ -51,7 +51,7 @@ const MyList = ({
             />
           </Typography>
           <Divider />
-          <ListItemIcon sx={{ ml: 'auto' }}>
+          <ListItemIcon sx={{ ml: "auto" }}>
             <DirectionsIcon />
           </ListItemIcon>
         </ListItem>
@@ -78,7 +78,7 @@ const SearchPage = () => {
     let filteredStreets = areaDataSets[searchFilters.dataset];
 
     let term = searchFilters.searchTerm.toLowerCase();
-    term = toGreek(term, '?');
+    term = toGreek(term, "?");
 
     if (searchFilters.characters > 0) {
       filteredStreets = filteredStreets.filter(
@@ -86,20 +86,18 @@ const SearchPage = () => {
       );
     }
 
-    if (searchFilters.searchMode === 'anagram') {
-      return filteredStreets.filter(
+    if (searchFilters.searchMode === "anagram") {
+      filteredStreets = filteredStreets.filter(
         ({ street }) =>
-          street.toLowerCase().split('').sort().join('') === term.split('').sort().join('')
+          street.toLowerCase().split("").sort().join("") === term.split("").sort().join("")
       );
-    }
-
-    if (term.match(/\?|\*/g)) {
+    } else if (term.match(/\?|\*/g)) {
       const isMatch = wcmatch(term);
 
       filteredStreets = filteredStreets.filter(({ street }) => isMatch(street.toLowerCase()));
     } else if (term) {
       filteredStreets = filteredStreets.filter(({ street }) => {
-        const rgx = new RegExp(term, 'ig');
+        const rgx = new RegExp(term, "ig");
         return rgx.test(street);
       });
     }
@@ -122,7 +120,7 @@ const SearchPage = () => {
       <Stack gap={2} alignItems='center'>
         <SearchFilters searchFilters={searchFilters} handleChange={handleChange} />
         <Button
-          style={{ width: '160px', marginBottom: '8px' }}
+          style={{ width: "160px", marginBottom: "8px" }}
           variant='contained'
           color='primary'
           onClick={() => setSearchFilters(defaultFilters)}
@@ -133,7 +131,7 @@ const SearchPage = () => {
 
       {displayInfo.length > 0 ? (
         <OptimizedList
-          style={{ maxHeight: '450px' }}
+          style={{ maxHeight: "450px" }}
           hasMore={displayInfo.length <= locationInfo.length}
           loadMore={loadMore}
           items={displayInfo}

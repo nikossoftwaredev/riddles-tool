@@ -54,12 +54,14 @@ module.exports = (env, argv) => {
       new WorkboxWebpackPlugin.GenerateSW({
         clientsClaim: true,
         skipWaiting: true,
+        cleanupOutdatedCaches: true,
         runtimeCaching: [
           {
             urlPattern: new RegExp(".*"),
             handler: "CacheFirst",
+
             options: {
-              cacheName: "cache-every-file"
+              cacheName: `cache-every-file-${Date.now()}`
             }
           }
         ]
