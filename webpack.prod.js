@@ -111,7 +111,17 @@ module.exports = (env, argv) => {
         }
       }),
       new CopyPlugin({
-        patterns: [{ context: "public/", from: "assets/**/*", to: "./" }]
+        patterns: [
+          {
+            from: "public/",
+            to: "./",
+            globOptions: {
+              dot: true,
+              gitignore: true,
+              ignore: ["**/index.html"]
+            }
+          }
+        ]
       }),
       new CompressionPlugin(),
       new webpack.optimize.SplitChunksPlugin(),

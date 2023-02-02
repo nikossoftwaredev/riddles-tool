@@ -9,6 +9,9 @@ module.exports = (env, argv) => {
   const devServer = {
     open: true,
     historyApiFallback: true,
+    headers: {
+      "Content-Type": "application/javascript"
+    },
     port: 3000,
     hot: true,
     watchFiles: ["src/**/*"],
@@ -26,13 +29,14 @@ module.exports = (env, argv) => {
 
   const config = {
     context: __dirname,
+    mode: "development",
+    devServer,
     entry: "./src/index.tsx",
     output: {
       path: path.resolve(__dirname, "dist"),
       filename: "index.js",
       publicPath: "/"
     },
-    devServer,
     devtool: "cheap-module-source-map",
     module: {
       rules: [
@@ -60,17 +64,12 @@ module.exports = (env, argv) => {
                 url: false
               }
             }
-          ].filter(Boolean),
+          ],
           sideEffects: true
         },
         {
           test: /\.s[ac]ss$/i,
-          use: [
-            // fallback to style-loader in development
-            "style-loader",
-            "css-loader",
-            "sass-loader"
-          ]
+          use: ["style-loader", "css-loader", "sass-loader"]
         },
         {
           test: /\.(png|jpe?g|gif|svg)$/i,
@@ -87,19 +86,6 @@ module.exports = (env, argv) => {
       ]
     },
     plugins: [
-      new WorkboxWebpackPlugin.GenerateSW({
-        clientsClaim: true,
-        skipWaiting: true,
-        runtimeCaching: [
-          {
-            urlPattern: new RegExp(".*"),
-            handler: "CacheFirst",
-            options: {
-              cacheName: "cache-every-file"
-            }
-          }
-        ]
-      }),
       new ForkTsCheckerWebpackPlugin({
         async: true,
         typescript: {
