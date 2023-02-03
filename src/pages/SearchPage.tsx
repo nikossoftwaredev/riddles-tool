@@ -128,10 +128,9 @@ const SearchPage = () => {
           Clear Filters
         </Button>
       </Stack>
-
       {displayInfo.length > 0 ? (
         <OptimizedList
-          style={{ maxHeight: "450px" }}
+          style={{ maxHeight: "100%" }}
           hasMore={displayInfo.length <= locationInfo.length}
           loadMore={loadMore}
           items={displayInfo}

@@ -59,7 +59,6 @@ module.exports = (env, argv) => {
           {
             urlPattern: new RegExp(".*"),
             handler: "CacheFirst",
-
             options: {
               cacheName: `cache-every-file-${Date.now()}`
             }

@@ -1,17 +1,17 @@
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
-import { FormControlLabel, InputAdornment, Radio, RadioGroup, TextField } from '@mui/material';
-import { ISearchFilters } from 'types/search';
-import { areaDataSets } from 'data/general';
-import HintPopover from './HintPopover';
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
+import { FormControlLabel, InputAdornment, Radio, RadioGroup, TextField } from "@mui/material";
+import { ISearchFilters } from "types/search";
+import { areaDataSets } from "data/general";
+import HintPopover from "./HintPopover";
 
 interface SearchFiltersProps {
   searchFilters: ISearchFilters;
   handleChange: (
     value: ISearchFilters[typeof dataField],
-    dataField: keyof SearchFiltersProps['searchFilters']
+    dataField: keyof SearchFiltersProps["searchFilters"]
   ) => void;
 }
 const SearchFilters = ({ searchFilters, handleChange }: SearchFiltersProps) => {
@@ -23,18 +23,18 @@ const SearchFilters = ({ searchFilters, handleChange }: SearchFiltersProps) => {
           aria-labelledby='demo-radio-buttons-group-label'
           defaultValue='search'
           name='radio-buttons-group'
-          onChange={e => handleChange(e.target.value, 'searchMode')}
+          onChange={e => handleChange(e.target.value, "searchMode")}
         >
           <FormControlLabel value='search' control={<Radio />} label='Search' />
           <FormControlLabel value='anagram' control={<Radio />} label='Anagram' />
         </RadioGroup>
       </FormControl>
       <TextField
-        style={{ width: '350px' }}
+        style={{ width: "350px" }}
         fullWidth
         size='small'
         value={searchFilters.searchTerm}
-        onChange={e => handleChange(e.target.value, 'searchTerm')}
+        onChange={e => handleChange(e.target.value, "searchTerm")}
         id='outlined-basic'
         label='Search...'
         variant='outlined'
@@ -55,12 +55,12 @@ const SearchFilters = ({ searchFilters, handleChange }: SearchFiltersProps) => {
           value={searchFilters.characters}
           label='Characters'
           onChange={e => {
-            handleChange(e.target.value, 'characters');
+            handleChange(e.target.value, "characters");
           }}
         >
-          {Array.from(Array(25).keys()).map(number => (
+          {Array.from(Array(20).keys()).map(number => (
             <MenuItem key={number} value={number}>
-              {number || 'Unset'}
+              {number || "Unset"}
             </MenuItem>
           ))}
         </Select>
@@ -72,7 +72,7 @@ const SearchFilters = ({ searchFilters, handleChange }: SearchFiltersProps) => {
           value={searchFilters.dataset}
           label='Data-set'
           onChange={e => {
-            handleChange(e.target.value, 'dataset');
+            handleChange(e.target.value, "dataset");
           }}
         >
           {Object.keys(areaDataSets).map(area => (

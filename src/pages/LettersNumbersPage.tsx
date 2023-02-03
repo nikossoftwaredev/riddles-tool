@@ -1,37 +1,37 @@
-import { Stack, IconButton, Box, TextField, InputAdornment, colors } from '@mui/material';
-import CompareArrowsIcon from '@mui/icons-material/CompareArrows';
-import { useMemo, useState } from 'react';
-import ClearIcon from '@mui/icons-material/Clear';
-import CopyText from 'components/CopyText';
-import { englishLetters, greekLetters } from 'data/letters';
+import { Stack, IconButton, Box, TextField, InputAdornment, colors } from "@mui/material";
+import CompareArrowsIcon from "@mui/icons-material/CompareArrows";
+import { useMemo, useState } from "react";
+import ClearIcon from "@mui/icons-material/Clear";
+import CopyText from "components/CopyText";
+import { englishLetters, greekLetters } from "data/letters";
 
 interface Mode {
-  from: 'Numbers' | 'Letters';
-  to: 'Numbers' | 'Letters';
+  from: "Numbers" | "Letters";
+  to: "Numbers" | "Letters";
 }
 const LettersNumbersPage = () => {
   const [mode, setMode] = useState<Mode>({
-    from: 'Numbers',
-    to: 'Letters'
+    from: "Numbers",
+    to: "Letters"
   });
 
-  const [text, setText] = useState('');
+  const [text, setText] = useState("");
 
   const onToggleMode = () => {
-    if (mode.from === 'Numbers') {
-      setMode({ from: 'Letters', to: 'Numbers' });
+    if (mode.from === "Numbers") {
+      setMode({ from: "Letters", to: "Numbers" });
     } else {
-      setMode({ from: 'Numbers', to: 'Letters' });
+      setMode({ from: "Numbers", to: "Letters" });
     }
   };
 
   const { gr, en } = useMemo(() => {
-    if (text === '') return { gr: '', en: '' };
+    if (text === "") return { gr: "", en: "" };
     let greek: number[] | string[] = [];
     let english: number[] | string[] = [];
 
-    if (mode.from === 'Letters') {
-      const textArray = text.toLowerCase().split('');
+    if (mode.from === "Letters") {
+      const textArray = text.toLowerCase().split("");
       greek = textArray
         .map((letter: string) => greekLetters.indexOf(letter) + 1)
         .filter((letter: number) => letter > 0);
@@ -39,22 +39,22 @@ const LettersNumbersPage = () => {
       english = textArray
         .map((letter: string) => englishLetters.indexOf(letter) + 1)
         .filter((letter: number) => letter > 0);
-    } else if (mode.from === 'Numbers') {
+    } else if (mode.from === "Numbers") {
       const textArray = text.split(/ /);
 
-      greek = textArray.map((number: string) => greekLetters[parseInt(number, 10) - 1] || '-');
+      greek = textArray.map((number: string) => greekLetters[parseInt(number, 10) - 1] || "-");
 
-      english = textArray.map((number: string) => englishLetters[parseInt(number, 10) - 1] || '-');
+      english = textArray.map((number: string) => englishLetters[parseInt(number, 10) - 1] || "-");
     }
 
     return {
-      gr: greek.join(' ').toUpperCase(),
-      en: english.join(' ').toUpperCase()
+      gr: greek.join(" ").toUpperCase(),
+      en: english.join(" ").toUpperCase()
     };
   }, [text, mode.from]);
 
   return (
-    <Stack gap={2} sx={{ width: '100%' }}>
+    <Stack gap={2} sx={{ width: "100%" }}>
       <Stack direction='row' justifyContent='center' alignItems='center' gap={2}>
         <Box sx={{ flex: 0.3, color: colors.green[500] }}>{mode.from}</Box>
         <IconButton sx={{ flex: 0.3 }} onClick={onToggleMode}>
@@ -73,15 +73,15 @@ const LettersNumbersPage = () => {
         InputProps={{
           endAdornment: (
             <InputAdornment position='end'>
-              <ClearIcon onClick={() => setText('')} />
+              <ClearIcon onClick={() => setText("")} />
             </InputAdornment>
           )
         }}
       />
-      {['gr', 'en'].map(language => (
+      {["gr", "en"].map(language => (
         <CopyText
           key={language}
-          text={language === 'gr' ? gr : en}
+          text={language === "gr" ? gr : en}
           icon={`assets/${language}.svg`}
         />
       ))}

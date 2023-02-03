@@ -9,10 +9,7 @@ module.exports = (env, argv) => {
   const devServer = {
     open: true,
     historyApiFallback: true,
-    headers: {
-      "Content-Type": "application/javascript"
-    },
-    port: 3000,
+    port: env.port || 3000,
     hot: true,
     watchFiles: ["src/**/*"],
     client: {

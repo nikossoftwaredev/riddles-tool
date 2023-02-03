@@ -1,9 +1,9 @@
-import Icon from '@mui/material/Icon';
+import Icon from "@mui/material/Icon";
 
-const IconWrapper = ({ src }: { src: string }) => {
+const IconWrapper = ({ src, style = {} }: { src: string; style: React.CSSProperties }) => {
   return (
-    <Icon>
-      <img alt={src} style={{ height: '100%', width: '100%' }} src={src} />
+    <Icon style={style}>
+      <img alt={src} style={{ height: "100%", width: "100%" }} src={src} />
     </Icon>
   );
 };

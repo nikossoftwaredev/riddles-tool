@@ -35,15 +35,22 @@
     "import/no-unresolved": "off",
     "no-debugger": "error",
     "no-console": "error",
-    "no-unused-vars": "off",
     // Camelcase will become error and not warn
     "camelcase": "off",
-    "@typescript-eslint/camelcase": ["off"],
-    "@typescript-eslint/no-unused-vars": ["error"],
+    "@typescript-eslint/camelcase": [
+      "off"
+    ],
+    "@typescript-eslint/no-unused-vars": [
+      "warn"
+    ],
     "no-use-before-define": "off",
-    "@typescript-eslint/no-use-before-define": ["error"],
+    "@typescript-eslint/no-use-before-define": [
+      "error"
+    ],
     "no-shadow": "off",
-    "@typescript-eslint/no-shadow": ["error"],
+    "@typescript-eslint/no-shadow": [
+      "error"
+    ],
     "import/extensions": [
       "error",
       "ignorePackages",
@@ -59,7 +66,12 @@
     "react/jsx-filename-extension": [
       1,
       {
-        "extensions": [".js", ".ts", ".jsx", "tsx"]
+        "extensions": [
+          ".js",
+          ".ts",
+          ".jsx",
+          "tsx"
+        ]
       }
     ],
     "max-len": [
@@ -91,9 +103,13 @@
   "overrides": [
     {
       // enable the rule specifically for TypeScript files
-      "files": ["*.ts"],
+      "files": [
+        "*.ts"
+      ],
       "rules": {
-        "@typescript-eslint/explicit-function-return-type": ["error"],
+        "@typescript-eslint/explicit-function-return-type": [
+          "error"
+        ],
         "react/react-in-jsx-scope": "off"
       }
     }
