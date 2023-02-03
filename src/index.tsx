@@ -8,6 +8,13 @@ if ("serviceWorker" in navigator) {
     window.addEventListener("load", () => {
       navigator.serviceWorker.register("/service-worker.js");
     });
+
+    navigator.serviceWorker.addEventListener("controllerchange", () => {
+      // A new service worker has taken over, check if there's a new version of the app.
+      if (window.confirm("A new version of this app is available. Would you like to update?")) {
+        window.location.reload();
+      }
+    });
   }
 }
 

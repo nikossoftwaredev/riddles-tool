@@ -34,7 +34,6 @@ module.exports = (env, argv) => {
     optimization: {
       // --- 111111 --- 111111 --- 111111 --- 111111 --- 111111 ---
       minimize: true,
-      // moduleIds: 'deterministic',
       runtimeChunk: {
         name: entrypoint => `runtime-${entrypoint.name}`
       },
