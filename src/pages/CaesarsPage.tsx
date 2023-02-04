@@ -88,6 +88,13 @@ const CaesarsPage = () => {
     [language]
   );
 
+  const onLanguageChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
+
+    setLanguage(value);
+    setText(prev => (value === "en" ? toGreeklish(prev) : toGreek(prev)));
+  }, []);
+
   useEffect(() => {
     setShiftedTextsDebounce(letters, text);
   }, [letters, setShiftedTextsDebounce, text]);
@@ -102,7 +109,7 @@ const CaesarsPage = () => {
             aria-labelledby='demo-radio-buttons-group-label'
             value={language}
             name='radio-buttons-group'
-            onChange={e => setLanguage(e.target.value)}
+            onChange={onLanguageChange}
           >
             <FormControlLabel value='gr' control={<Radio />} label='Greek' />
             <FormControlLabel value='en' control={<Radio />} label='English' />
