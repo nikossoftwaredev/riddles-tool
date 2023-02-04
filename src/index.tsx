@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-d
 import App from "App";
 
 const { VERSION } = process.env;
-const cacheName = `cache-every-file-${VERSION}`;
+const currentCacheName = `cache-every-file-${VERSION}`;
 
 if ("serviceWorker" in navigator) {
   if (process.env.NODE_ENV === "production") {
@@ -15,18 +15,25 @@ if ("serviceWorker" in navigator) {
     navigator.serviceWorker.addEventListener("controllerchange", event => {
       // A new service worker has taken over, check if there's a new version of the app.
 
-      caches.keys().then(keysList => {
-        const isCurrentVersion = keysList.find(key => key === cacheName);
-        const oldCacheKeys = keysList.filter(key => key !== cacheName);
+      event.waitUntil(
+        caches.keys().then(async cacheNames => {
+          const isCurrentVersion = cacheNames.find(cacheName => cacheName === currentCacheName);
 
-        console.log({ isCurrentVersion, oldCacheKeys });
+          console.log({ isCurrentVersion });
 
-        if (isCurrentVersion) return;
+          if (window.confirm("A new version of this app is available. Would you like to update?")) {
+            await Promise.all(
+              cacheNames
+                .filter(cacheName => cacheName !== `cache-every-file-${process.env.VERSION}`)
+                .map(cacheName => caches.delete(cacheName))
+            );
 
-        if (window.confirm("A new version of this app is available. Would you like to update?")) {
-          window.location.reload();
-        }
-      });
+            window.location.reload();
+          }
+
+          console.log("Deleting old cache");
+        })
+      );
     });
   }
 }
