@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-d
 import App from "App";
 
 const { VERSION } = process.env;
+const cacheName = `cache-every-file-${VERSION}`;
 
 if ("serviceWorker" in navigator) {
   if (process.env.NODE_ENV === "production") {
@@ -11,21 +12,38 @@ if ("serviceWorker" in navigator) {
       navigator.serviceWorker.register("/service-worker.js");
     });
 
-    navigator.serviceWorker.addEventListener("controllerchange", () => {
+    navigator.serviceWorker.addEventListener("controllerchange", event => {
       // A new service worker has taken over, check if there's a new version of the app.
-      if (window.confirm("A new version of this app is available. Would you like to update?")) {
-        const prevVersion = Number(VERSION) - 0.001;
-        const cacheName = `cache-every-file-${prevVersion}`;
-        caches.delete(cacheName).then(boolean => {
-          if (boolean) {
-            console.log(`Cache deleted ${cacheName}`);
-          } else {
-            console.log("Cache not found");
-          }
-        });
 
-        window.location.reload();
-      }
+      caches.keys().then(keysList => {
+        const isCurrentVersion = keysList.find(key => key === cacheName);
+        const oldCacheKeys = keysList.filter(key => key !== cacheName);
+
+        console.log({ isCurrentVersion, oldCacheKeys });
+
+        if (isCurrentVersion) return;
+
+        Promise.all(
+          oldCacheKeys.map(key => {
+            console.log("[SW] Deleting Old Cache: ", key);
+            return caches.delete(key);
+          })
+        );
+
+        if (window.confirm("A new version of this app is available. Would you like to update?")) {
+          window.location.reload();
+          // const prevVersion = Number(VERSION) - 0.001;
+          //
+
+          // caches.delete(cacheName).then(boolean => {
+          //   if (boolean) {
+          //     console.log(`Cache deleted ${cacheName}`);
+          //   } else {
+          //     console.log("Cache not found");
+          //   }
+          // });
+        }
+      });
     });
   }
 }

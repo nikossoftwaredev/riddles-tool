@@ -4,7 +4,7 @@
   "private": true,
   "version": "0.0.0",
   "scripts": {
-    "start": "webpack serve --config webpack.dev.js",
+    "start": "webpack-dev-server --config webpack.dev.js",
     "build": "webpack --config webpack.prod.js",
     "serve": "serve -s dist",
     "clear-install": "rm -rf node_modules/ yarn.lock && yarn install"
@@ -45,6 +45,7 @@
     "core-js": "^3.27.2",
     "css-loader": "^6.7.3",
     "dotenv": "^16.0.3",
+    "dotenv-webpack": "^8.0.1",
     "eslint": "^8.33.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-airbnb-typescript": "^17.0.0",

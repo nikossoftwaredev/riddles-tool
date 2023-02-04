@@ -5,20 +5,16 @@ const dotenv = require("dotenv");
 const CopyPlugin = require("copy-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
-const SpeedMeasurePlugin = require("speed-measure-webpack-plugin");
 const CompressionPlugin = require("compression-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const WorkboxWebpackPlugin = require("workbox-webpack-plugin");
 
-const smp = new SpeedMeasurePlugin();
-
 dotenv.config({ path: ".env" });
 
+const { VERSION } = process.env;
 const shouldBundleAnalyze = process.env.BUNDLE_ANALYZE === "true";
-const shouldBundleTimer = process.env.BUNDLE_TIMER === "true";
-const VERSION = process.env.VERSION;
 
 module.exports = (env, argv) => {
   const config = {
@@ -55,9 +51,10 @@ module.exports = (env, argv) => {
         clientsClaim: true,
         skipWaiting: true,
         cleanupOutdatedCaches: true,
+        maximumFileSizeToCacheInBytes: 8097152,
         runtimeCaching: [
           {
-            urlPattern: new RegExp(".*"),
+            urlPattern: /.*/,
             handler: "CacheFirst",
             options: {
               cacheName: `cache-every-file-${VERSION}`
@@ -73,7 +70,6 @@ module.exports = (env, argv) => {
         process: "process/browser",
         Buffer: ["buffer", "Buffer"]
       }),
-      new CleanWebpackPlugin(),
       new HtmlWebpackPlugin({
         title: "Caching",
         inject: true,
@@ -126,16 +122,12 @@ module.exports = (env, argv) => {
       }),
       new CompressionPlugin(),
       new webpack.optimize.SplitChunksPlugin(),
-      new webpack.optimize.AggressiveMergingPlugin(),
-      new MiniCssExtractPlugin({
-        filename: "[name].[contenthash:8].css",
-        chunkFilename: "[name].[contenthash:8].css"
-      })
+      new webpack.optimize.AggressiveMergingPlugin()
     ].filter(Boolean),
     module: {
       rules: [
         {
-          test: /\.(js|jsx)$/,
+          test: /\.(jsx?)$/,
           exclude: /node_modules/,
           include: path.resolve(__dirname, "src"),
           use: {
@@ -158,17 +150,12 @@ module.exports = (env, argv) => {
                 url: false
               }
             }
-          ].filter(Boolean),
+          ],
           sideEffects: true
         },
         {
           test: /\.s[ac]ss$/i,
-          use: [
-            // fallback to style-loader in development
-            "style-loader",
-            "css-loader",
-            "sass-loader"
-          ]
+          use: ["style-loader", "css-loader", "sass-loader"]
         },
         {
           test: /\.(png|jpe?g|gif|svg)$/i,
@@ -181,12 +168,6 @@ module.exports = (env, argv) => {
               loader: "url-loader"
             }
           ]
-        },
-        {
-          test: /\.m?js/,
-          resolve: {
-            fullySpecified: false
-          }
         }
       ]
     },
@@ -202,8 +183,6 @@ module.exports = (env, argv) => {
       }
     }
   };
-
-  if (shouldBundleTimer) return smp.wrap(config);
 
   return config;
 };

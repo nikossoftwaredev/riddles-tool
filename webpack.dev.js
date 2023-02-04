@@ -1,9 +1,11 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const path = require("path");
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const webpack = require("webpack");
+const dotenv = require("dotenv");
 const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-const WorkboxWebpackPlugin = require("workbox-webpack-plugin");
+
+dotenv.config({ path: ".env" });
 
 module.exports = (env, argv) => {
   const devServer = {
@@ -38,7 +40,7 @@ module.exports = (env, argv) => {
     module: {
       rules: [
         {
-          test: /\.(js|jsx)$/,
+          test: /\.(jsx?)$/,
           exclude: /node_modules/,
           include: path.resolve(__dirname, "src"),
           use: {
@@ -46,7 +48,7 @@ module.exports = (env, argv) => {
           }
         },
         {
-          test: /.(ts|tsx)?$/,
+          test: /.tsx?$/,
           exclude: /node_modules/,
           include: path.resolve(__dirname, "src"),
           use: [{ loader: "ts-loader", options: { transpileOnly: true } }]
@@ -83,6 +85,9 @@ module.exports = (env, argv) => {
       ]
     },
     plugins: [
+      new webpack.DefinePlugin({
+        "process.env": JSON.stringify(process.env)
+      }),
       new ForkTsCheckerWebpackPlugin({
         async: true,
         typescript: {

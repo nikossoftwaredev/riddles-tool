@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
-import { Stack, Box, Tabs, Tab } from "@mui/material";
+import { Stack, Box, Tabs, Tab, Typography, colors } from "@mui/material";
 import CompareArrowsIcon from "@mui/icons-material/CompareArrows";
 import SearchIcon from "@mui/icons-material/Search";
 import SavingsIcon from "@mui/icons-material/Savings";
@@ -83,11 +83,14 @@ const RiddleTabs = () => {
   return (
     <Stack
       gap={2}
-      sx={{ height: "100vh", width: "350px", maxWidth: "100vw" }}
+      sx={{ height: "100vh", width: "350px", maxWidth: "100vw", position: "relative" }}
       direction='column'
       alignItems='center'
       justifyContent='center'
     >
+      <Typography sx={{ position: "absolute", right: 1, top: 1, color: colors.grey[500] }}>
+        v{process.env.VERSION}
+      </Typography>
       <Box sx={{ flex: 1, overflow: "hidden" }}>{tabsConfig[tabIndex].tabContent}</Box>
       <Tabs
         ScrollButtonComponent={CustomTabScrollButton}
