@@ -20,11 +20,13 @@ if ("serviceWorker" in navigator) {
 
         console.log({ isCurrentVersion, cacheNames });
 
-        await Promise.all(
-          cacheNames
-            .filter(cacheName => cacheName !== `cache-every-file-${process.env.VERSION}`)
-            .map(cacheName => caches.delete(cacheName))
+        const cachesToDelete = cacheNames.filter(
+          cacheName =>
+            cacheName !== `cache-every-file-${process.env.VERSION}` ||
+            !cacheName.startsWith("cache-every-file")
         );
+
+        await Promise.all(cachesToDelete.map(cacheName => caches.delete(cacheName)));
 
         if (
           !isCurrentVersion &&
