@@ -1,18 +1,11 @@
 body {
   margin: 0;
   width: 100%;
-  min-height: fill-available;
-  min-height: -webkit-fill-available;
+  height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
   overflow-y: hidden;
-}
-
-
-html {
-  height: fill-available;
-  height: -webkit-fill-available;
 }
 
 * {

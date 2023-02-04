@@ -83,7 +83,7 @@ const RiddleTabs = () => {
   return (
     <Stack
       gap={2}
-      sx={{ height: "100%", width: "350px", maxWidth: "100vw", position: "relative" }}
+      sx={{ height: "100vh", width: "350px", maxWidth: "100vw", position: "relative" }}
       direction='column'
       alignItems='center'
       justifyContent='center'
