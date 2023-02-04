@@ -44,6 +44,7 @@
     "src",
     "webpack.dev.js",
     "webpack.prod.js",
-    "webpack.dev.js"
+    "webpack.dev.js",
+    "custom-sw.js"
   ]
 }
