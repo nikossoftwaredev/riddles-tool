@@ -16,21 +16,22 @@ if ("serviceWorker" in navigator) {
       // A new service worker has taken over, check if there's a new version of the app.
 
       caches.keys().then(async cacheNames => {
-        const isCurrentVersion = cacheNames.find(cacheName => cacheName === currentCacheName);
+        const isCurrentVersion = !!cacheNames.find(cacheName => cacheName === currentCacheName);
 
         console.log({ isCurrentVersion, cacheNames });
 
-        if (window.confirm("A new version of this app is available. Would you like to update?")) {
-          await Promise.all(
-            cacheNames
-              .filter(cacheName => cacheName !== `cache-every-file-${process.env.VERSION}`)
-              .map(cacheName => caches.delete(cacheName))
-          );
+        await Promise.all(
+          cacheNames
+            .filter(cacheName => cacheName !== `cache-every-file-${process.env.VERSION}`)
+            .map(cacheName => caches.delete(cacheName))
+        );
 
+        if (
+          !isCurrentVersion &&
+          window.confirm("A new version of this app is available. Would you like to update?")
+        ) {
           window.location.reload();
         }
-
-        console.log("Deleting old cache");
       });
     });
   }
