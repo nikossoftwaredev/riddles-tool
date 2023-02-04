@@ -11,6 +11,7 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const WorkboxWebpackPlugin = require("workbox-webpack-plugin");
+const { VERSION } = require("config");
 
 const smp = new SpeedMeasurePlugin();
 
@@ -59,7 +60,7 @@ module.exports = (env, argv) => {
             urlPattern: new RegExp(".*"),
             handler: "CacheFirst",
             options: {
-              cacheName: `cache-every-file-${Date.now()}`
+              cacheName: `cache-every-file-${VERSION}`
             }
           }
         ]
