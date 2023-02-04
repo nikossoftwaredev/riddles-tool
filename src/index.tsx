@@ -12,29 +12,25 @@ if ("serviceWorker" in navigator) {
       navigator.serviceWorker.register("/service-worker.js");
     });
 
-    navigator.serviceWorker.addEventListener("controllerchange", event => {
-      // A new service worker has taken over, check if there's a new version of the app.
+    caches.keys().then(async cacheNames => {
+      const isCurrentVersion = !!cacheNames.find(cacheName => cacheName === currentCacheName);
 
-      caches.keys().then(async cacheNames => {
-        const isCurrentVersion = !!cacheNames.find(cacheName => cacheName === currentCacheName);
+      console.log({ isCurrentVersion, cacheNames });
 
-        console.log({ isCurrentVersion, cacheNames });
+      const cachesToDelete = cacheNames.filter(
+        cacheName =>
+          cacheName !== `cache-every-file-${process.env.VERSION}` ||
+          !cacheName.startsWith("cache-every-file")
+      );
 
-        const cachesToDelete = cacheNames.filter(
-          cacheName =>
-            cacheName !== `cache-every-file-${process.env.VERSION}` ||
-            !cacheName.startsWith("cache-every-file")
-        );
+      await Promise.all(cachesToDelete.map(cacheName => caches.delete(cacheName)));
 
-        await Promise.all(cachesToDelete.map(cacheName => caches.delete(cacheName)));
-
-        if (
-          !isCurrentVersion &&
-          window.confirm("A new version of this app is available. Would you like to update?")
-        ) {
-          window.location.reload();
-        }
-      });
+      if (
+        !isCurrentVersion &&
+        window.confirm("A new version of this app is available. Would you like to update?")
+      ) {
+        window.location.reload();
+      }
     });
   }
 }

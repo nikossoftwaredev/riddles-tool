@@ -52,7 +52,7 @@ module.exports = (env, argv) => {
         runtimeCaching: [
           {
             // eslint-disable-next-line prefer-regex-literals
-            urlPattern: new RegExp(".*"),
+            urlPattern: /\w+/,
             handler: "CacheFirst",
             options: {
               cacheName: `cache-every-file-${VERSION}`
