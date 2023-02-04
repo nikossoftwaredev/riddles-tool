@@ -34,7 +34,7 @@
     "import/prefer-default-export": "off",
     "import/no-unresolved": "off",
     "no-debugger": "error",
-    "no-console": "error",
+    "no-console": "warn",
     // Camelcase will become error and not warn
     "camelcase": "off",
     "@typescript-eslint/camelcase": [

@@ -11,7 +11,6 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const WorkboxWebpackPlugin = require("workbox-webpack-plugin");
-const { VERSION } = require("config");
 
 const smp = new SpeedMeasurePlugin();
 
@@ -19,6 +18,7 @@ dotenv.config({ path: ".env" });
 
 const shouldBundleAnalyze = process.env.BUNDLE_ANALYZE === "true";
 const shouldBundleTimer = process.env.BUNDLE_TIMER === "true";
+const VERSION = process.env.VERSION;
 
 module.exports = (env, argv) => {
   const config = {
