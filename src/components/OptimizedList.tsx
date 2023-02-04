@@ -1,5 +1,5 @@
-import React, { useEffect, useRef } from 'react';
-import PerfectScrollbar from 'react-perfect-scrollbar';
+import React, { useEffect, useRef } from "react";
+import PerfectScrollbar from "react-perfect-scrollbar";
 
 interface OptimizedListProps {
   hasMore: boolean;
@@ -29,12 +29,12 @@ const OptimizedList: React.FC<OptimizedListProps> = ({
     };
 
     if (scrollRef.current) {
-      scrollRef.current.addEventListener('scroll', handleScroll);
+      scrollRef.current.addEventListener("scroll", handleScroll);
     }
 
     return () => {
       if (scrollRef.current) {
-        scrollRef.current.removeEventListener('scroll', handleScroll);
+        scrollRef.current.removeEventListener("scroll", handleScroll);
       }
     };
   }, [loadMore, hasMore]);
@@ -44,7 +44,7 @@ const OptimizedList: React.FC<OptimizedListProps> = ({
       containerRef={el => {
         scrollRef.current = el;
       }}
-      style={{ height: '100%', overflow: 'auto', ...style }}
+      style={{ height: "100%", overflow: "auto", ...style }}
     >
       {renderItems(items)}
     </PerfectScrollbar>

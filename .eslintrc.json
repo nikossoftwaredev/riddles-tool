@@ -36,6 +36,7 @@
     "no-debugger": "error",
     "no-unused-vars": "off",
     "no-console": "warn",
+    "no-plusplus": "off",
     // Camelcase will become error and not warn
     "camelcase": "off",
     "@typescript-eslint/camelcase": [

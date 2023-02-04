@@ -21,7 +21,7 @@ const SearchFilters = ({ searchFilters, handleChange }: SearchFiltersProps) => {
         <RadioGroup
           row
           aria-labelledby='demo-radio-buttons-group-label'
-          defaultValue='search'
+          value={searchFilters.searchMode}
           name='radio-buttons-group'
           onChange={e => handleChange(e.target.value, "searchMode")}
         >

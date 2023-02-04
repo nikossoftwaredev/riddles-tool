@@ -1,23 +1,13 @@
 import { useCallback, useMemo, useRef, useState } from "react";
-import {
-  Box,
-  Button,
-  colors,
-  Divider,
-  ListItem,
-  ListItemIcon,
-  Stack,
-  Typography
-} from "@mui/material";
+import { Box, Button, Stack, Typography } from "@mui/material";
 
-import DirectionsIcon from "@mui/icons-material/Directions";
 import wcmatch from "wildcard-match";
 import { toGreek } from "greek-utils";
 import { ISearchFilters, LocationInfo } from "types/search";
 import { areaDataSets } from "data/general";
-import { highlightStringMatch } from "utils/test";
 import OptimizedList from "components/OptimizedList";
 import SearchFilters from "components/SearchFilters";
+import StreetList from "components/StreetList";
 
 const defaultFilters: ISearchFilters = {
   searchTerm: "",
@@ -26,48 +16,7 @@ const defaultFilters: ISearchFilters = {
   dataset: "ΟΛΑ"
 };
 
-const showInMapClicked = (term: string) => {
-  window.open(`https://maps.google.com?q=${term}`);
-};
-
 const threshold = 50;
-
-const MyList = ({
-  items,
-  searchTerm
-}: {
-  items: LocationInfo[];
-  searchTerm: string;
-}): JSX.Element => (
-  <>
-    {items.map(({ street, town }) => {
-      const fullStreet = `${street} ${town}`;
-      return (
-        <ListItem
-          key={fullStreet}
-          style={{ borderBottom: "1px solid black" }}
-          onClick={() => showInMapClicked(fullStreet)}
-          sx={{
-            cursor: "pointer",
-            "&:hover": { backgroundColor: colors.blue[600] }
-          }}
-        >
-          <Typography>
-            <span
-              dangerouslySetInnerHTML={{
-                __html: highlightStringMatch(fullStreet, searchTerm)
-              }}
-            />
-          </Typography>
-          <Divider />
-          <ListItemIcon sx={{ ml: "auto" }}>
-            <DirectionsIcon />
-          </ListItemIcon>
-        </ListItem>
-      );
-    })}
-  </>
-);
 
 const SearchPage = () => {
   const [searchFilters, setSearchFilters] = useState(defaultFilters);
@@ -86,7 +35,7 @@ const SearchPage = () => {
   const locationInfo: LocationInfo[] = useMemo(() => {
     let filteredStreets = areaDataSets[searchFilters.dataset];
 
-    let term = searchFilters.searchTerm.toLowerCase();
+    let term = searchFilters.searchTerm.toLocaleUpperCase();
     term = toGreek(term, "?");
 
     if (searchFilters.characters > 0) {
@@ -97,13 +46,12 @@ const SearchPage = () => {
 
     if (searchFilters.searchMode === "anagram") {
       filteredStreets = filteredStreets.filter(
-        ({ street }) =>
-          street.toLowerCase().split("").sort().join("") === term.split("").sort().join("")
+        ({ street }) => street.split("").sort().join("") === term.split("").sort().join("")
       );
     } else if (term.match(/\?|\*/g)) {
       const isMatch = wcmatch(term);
 
-      filteredStreets = filteredStreets.filter(({ street }) => isMatch(street.toLowerCase()));
+      filteredStreets = filteredStreets.filter(({ street }) => isMatch(street));
     } else if (term) {
       filteredStreets = filteredStreets.filter(({ street }) => {
         const rgx = new RegExp(term, "ig");
@@ -143,10 +91,16 @@ const SearchPage = () => {
           hasMore={displayInfo.length <= locationInfo.length}
           loadMore={loadMore}
           items={displayInfo}
-          renderItems={items => <MyList items={items} searchTerm={searchFilters.searchTerm} />}
+          renderItems={items => (
+            <StreetList
+              items={items}
+              searchTerm={searchFilters.searchTerm}
+              dataset={searchFilters.dataset}
+            />
+          )}
         />
       ) : (
-        <Typography align='left' sx={{ mt: 2 }}>
+        <Typography align='left' sx={{ mt: 2, flex: 1 }}>
           🧠 Something went wrong... <br />
           😭 No results found
         </Typography>

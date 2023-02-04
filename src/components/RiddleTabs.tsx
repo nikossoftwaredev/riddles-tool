@@ -12,6 +12,7 @@ import MorsePage from "pages/MorsePage";
 import MendeleevPage from "pages/MendeleevPage";
 import { makeStyles, withStyles } from "@mui/styles";
 import TabScrollButton from "@mui/material/TabScrollButton";
+import CaesarsPage from "pages/CaesarsPage";
 import IconWrapper from "./IconWrapper";
 
 const tabsConfig = [
@@ -26,6 +27,12 @@ const tabsConfig = [
     label: "A-Z_0-9",
     icon: <CompareArrowsIcon />,
     tabContent: <LettersNumbersPage />
+  },
+  {
+    id: "caesars",
+    label: "caesars",
+    tabContent: <CaesarsPage />,
+    icon: <IconWrapper src='assets/caesars.svg' style={{ marginBottom: "6px" }} />
   },
   {
     id: "mendeleev",
