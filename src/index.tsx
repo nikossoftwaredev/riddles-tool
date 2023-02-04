@@ -17,8 +17,8 @@ if ("serviceWorker" in navigator) {
 
       const cachesToDelete = cacheNames.filter(
         cacheName =>
-          cacheName !== `cache-every-file-${process.env.VERSION}` ||
-          !cacheName.startsWith("cache-every-file")
+          cacheName.startsWith("cache-every-file") &&
+          cacheName !== `cache-every-file-${process.env.VERSION}`
       );
 
       console.log({ isCurrentVersion, cacheNames, cachesToDelete });
