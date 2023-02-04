@@ -91,7 +91,7 @@ const RiddleTabs = () => {
       <Typography sx={{ position: "absolute", right: 1, top: 1, color: colors.grey[500] }}>
         v{process.env.VERSION}
       </Typography>
-      <Box sx={{ flex: 1, overflow: "hidden" }}>{tabsConfig[tabIndex].tabContent}</Box>
+      <Box sx={{ flex: 1, overflow: "auto" }}>{tabsConfig[tabIndex].tabContent}</Box>
       <Tabs
         ScrollButtonComponent={CustomTabScrollButton}
         className={classes.root}

@@ -1,5 +1,14 @@
 import { useCallback, useMemo, useRef, useState } from "react";
-import { Button, colors, Divider, ListItem, ListItemIcon, Stack, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  colors,
+  Divider,
+  ListItem,
+  ListItemIcon,
+  Stack,
+  Typography
+} from "@mui/material";
 
 import DirectionsIcon from "@mui/icons-material/Directions";
 import wcmatch from "wildcard-match";
@@ -116,7 +125,7 @@ const SearchPage = () => {
   }, [locationInfo]);
 
   return (
-    <>
+    <Stack alignItems='center' sx={{ height: "100%" }}>
       <Stack gap={2} alignItems='center'>
         <SearchFilters searchFilters={searchFilters} handleChange={handleChange} />
         <Button
@@ -130,7 +139,7 @@ const SearchPage = () => {
       </Stack>
       {displayInfo.length > 0 ? (
         <OptimizedList
-          style={{ maxHeight: "100%" }}
+          style={{ flex: 1 }}
           hasMore={displayInfo.length <= locationInfo.length}
           loadMore={loadMore}
           items={displayInfo}
@@ -142,7 +151,7 @@ const SearchPage = () => {
           😭 No results found
         </Typography>
       )}
-    </>
+    </Stack>
   );
 };
 

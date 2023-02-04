@@ -1,46 +1,77 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-const path = require("path");
 const webpack = require("webpack");
+const path = require("path");
 const dotenv = require("dotenv");
-const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 
 dotenv.config({ path: ".env" });
 
 module.exports = (env, argv) => {
-  const devServer = {
-    open: true,
-    historyApiFallback: true,
-    port: env.port || 3000,
-    hot: true,
-    watchFiles: ["src/**/*"],
-    client: {
-      progress: true,
-      overlay: {
-        errors: true,
-        warnings: false
-      }
-    },
-    static: {
-      directory: path.join(__dirname, "public")
-    }
-  };
-
   const config = {
-    context: __dirname,
     mode: "development",
-    devServer,
+    context: __dirname, // to automatically find tsconfig.json
     entry: "./src/index.tsx",
     output: {
-      path: path.resolve(__dirname, "dist"),
-      filename: "index.js",
+      path: path.resolve(__dirname, "build"),
+      // filename: 'index.js',
+      filename: "[name].[contenthash:8].js",
+      chunkFilename: "[name].[contenthash:8].js",
       publicPath: "/"
     },
+    devServer: {
+      open: true,
+      compress: true,
+      historyApiFallback: true,
+      port: 3000,
+      hot: true,
+      liveReload: true,
+      watchFiles: ["src/**/*"],
+      client: {
+        progress: true,
+        overlay: {
+          errors: true,
+          warnings: false
+        }
+      },
+      static: {
+        directory: path.join(__dirname, "public")
+      }
+    },
+    optimization: {
+      usedExports: true,
+      splitChunks: {
+        chunks: "all",
+        name: false
+      },
+      runtimeChunk: {
+        name: entrypoint => `runtime-${entrypoint.name}`
+      }
+    },
     devtool: "cheap-module-source-map",
+    plugins: [
+      new webpack.DefinePlugin({
+        "process.env": JSON.stringify(process.env)
+      }),
+      new HtmlWebpackPlugin({
+        title: "Caching",
+        inject: true,
+        template: "./public/index.html",
+        filename: "./index.html",
+        favicon: "./public/favicon.svg"
+      }),
+      new ForkTsCheckerWebpackPlugin({
+        async: true,
+        devServer: true,
+        typescript: {
+          configFile: path.resolve(__dirname, "tsconfig.json")
+        }
+      })
+    ],
     module: {
       rules: [
         {
-          test: /\.(jsx?)$/,
+          test: /\.(js|jsx)$/,
           exclude: /node_modules/,
           include: path.resolve(__dirname, "src"),
           use: {
@@ -48,7 +79,7 @@ module.exports = (env, argv) => {
           }
         },
         {
-          test: /.tsx?$/,
+          test: /\.(ts|tsx)$/,
           exclude: /node_modules/,
           include: path.resolve(__dirname, "src"),
           use: [{ loader: "ts-loader", options: { transpileOnly: true } }]
@@ -81,27 +112,15 @@ module.exports = (env, argv) => {
               loader: "url-loader"
             }
           ]
+        },
+        {
+          test: /\.m?js/,
+          resolve: {
+            fullySpecified: false
+          }
         }
       ]
     },
-    plugins: [
-      new webpack.DefinePlugin({
-        "process.env": JSON.stringify(process.env)
-      }),
-      new ForkTsCheckerWebpackPlugin({
-        async: true,
-        typescript: {
-          configFile: path.resolve(__dirname, "tsconfig.json")
-        }
-      }),
-      new HtmlWebpackPlugin({
-        title: "Caching",
-        inject: true,
-        template: `${__dirname}/public/index.html`,
-        filename: `${__dirname}/index.html`,
-        favicon: `${__dirname}/public/favicon.svg`
-      })
-    ],
     resolve: {
       extensions: [".tsx", ".ts", ".js", ".jsx", ".css", ".scss", ".json"],
       modules: [path.resolve(__dirname, "./src"), "node_modules"],
