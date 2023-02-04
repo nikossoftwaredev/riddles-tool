@@ -1,3 +1,4 @@
+import { useState, useMemo, useCallback, useEffect } from "react";
 import {
   Stack,
   TextField,
@@ -14,9 +15,9 @@ import {
   Radio,
   RadioGroup,
   IconButton,
-  tableCellClasses
+  tableCellClasses,
+  debounce
 } from "@mui/material";
-import { useState, useMemo, useCallback } from "react";
 import ClearIcon from "@mui/icons-material/Clear";
 import { englishLetters, greekLetters } from "data/letters";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
@@ -46,38 +47,50 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 const CaesarsPage = () => {
   const [text, setText] = useState("");
   const [language, setLanguage] = useState("en");
+  const [shiftedTexts, setShiftedTexts] = useState<string[]>([]);
 
   const letters = useMemo(() => (language === "gr" ? greekLetters : englishLetters), [language]);
 
-  const shiftedTexts = useMemo(() => {
-    const allShifts = [];
+  const setShiftedTextsDebounce = useCallback(
+    debounce((l: string[], t: string) => {
+      const allShifts = [];
 
-    for (let i = 0; i < letters.length; i++) {
-      const shiftedText = text
-        .split("")
-        .map(letter => {
-          if (letter === " ") return " ";
-          const letterIndex = letters.findIndex(grLetter => grLetter === letter);
-          const newIndex = (letterIndex + i) % letters.length;
+      for (let i = 0; i < l.length; i++) {
+        const shiftedText = t
+          .split("")
+          .map(letter => {
+            if (letter === " ") return " ";
+            const letterIndex = l.findIndex(grLetter => grLetter === letter);
+            const newIndex = (letterIndex + i) % l.length;
 
-          return letters[newIndex];
-        })
-        .join("");
+            return l[newIndex];
+          })
+          .join("");
 
-      allShifts.push(shiftedText);
-    }
+        allShifts.push(shiftedText);
+      }
 
-    return allShifts;
-  }, [letters, text]);
+      setShiftedTexts(allShifts);
+    }, 200),
+    []
+  );
 
   const handleChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const { value } = e.target;
 
+      const isTextRgx = /^[a-zA-Z ]+$/;
+      const isNotText = !isTextRgx.test(value);
+      if (isNotText) return;
+
       setText(language === "en" ? toGreeklish(value) : toGreek(value));
     },
     [language]
   );
+
+  useEffect(() => {
+    setShiftedTextsDebounce(letters, text);
+  }, [letters, setShiftedTextsDebounce, text]);
 
   return (
     <Stack alignItems='center' sx={{ height: "100%" }}>
@@ -129,10 +142,17 @@ const CaesarsPage = () => {
                 <StyledTableRow key={index} sx={{ overflow: "auto" }}>
                   <StyledTableCell>+{index}</StyledTableCell>
                   <StyledTableCell>
-                    {shiftedText}
-                    <IconButton onClick={() => navigator.clipboard.writeText(shiftedText)}>
-                      <ContentCopyIcon fontSize='small' sx={{ marginLeft: "auto" }} />
-                    </IconButton>
+                    <Stack
+                      alignItems='center'
+                      justifyContent='center'
+                      direction='row'
+                      sx={{ overflow: "auto", maxWidth: "100vh" }}
+                    >
+                      {shiftedText}
+                      <IconButton onClick={() => navigator.clipboard.writeText(shiftedText)}>
+                        <ContentCopyIcon fontSize='small' sx={{ marginLeft: "auto" }} />
+                      </IconButton>
+                    </Stack>
                   </StyledTableCell>
                 </StyledTableRow>
               ))}
