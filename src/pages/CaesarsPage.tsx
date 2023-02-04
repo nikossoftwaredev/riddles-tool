@@ -57,6 +57,7 @@ const CaesarsPage = () => {
 
       for (let i = 0; i < l.length; i++) {
         const shiftedText = t
+          .toLocaleLowerCase()
           .split("")
           .map(letter => {
             if (letter === " ") return " ";
