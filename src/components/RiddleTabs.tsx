@@ -13,6 +13,8 @@ import MendeleevPage from "pages/MendeleevPage";
 import { makeStyles, withStyles } from "@mui/styles";
 import TabScrollButton from "@mui/material/TabScrollButton";
 import CaesarsPage from "pages/CaesarsPage";
+import TextAnalyzePage from "pages/TextAnalyzePage";
+import AbcIcon from "@mui/icons-material/Abc";
 import IconWrapper from "./IconWrapper";
 
 const tabsConfig = [
@@ -39,6 +41,12 @@ const tabsConfig = [
     label: "mendeleev",
     tabContent: <MendeleevPage />,
     icon: <IconWrapper src='assets/pt.svg' style={{ marginBottom: "6px" }} />
+  },
+  {
+    id: "text-analyze",
+    label: "Text Analyze",
+    tabContent: <TextAnalyzePage />,
+    icon: <AbcIcon />
   },
   {
     id: "morse",

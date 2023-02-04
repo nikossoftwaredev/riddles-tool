@@ -95,12 +95,17 @@ const CaesarsPage = () => {
     [language, handleDebounceTextChange]
   );
 
-  const onLanguageChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = e.target;
+  const onLanguageChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const { value } = e.target;
 
-    setLanguage(value);
-    setText(prev => (value === "en" ? toGreeklish(prev) : toGreek(prev)));
-  }, []);
+      setLanguage(value);
+      const finalText = value === "en" ? toGreeklish(value) : toGreek(value);
+      setText(finalText);
+      handleDebounceTextChange(finalText);
+    },
+    [handleDebounceTextChange]
+  );
 
   return (
     <Stack alignItems='center' sx={{ height: "100%" }}>
