@@ -46,47 +46,53 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 const CaesarsPage = () => {
   const [text, setText] = useState("");
+  const [debouncedText, setDebouncedText] = useState("");
   const [language, setLanguage] = useState("en");
-  const [shiftedTexts, setShiftedTexts] = useState<string[]>([]);
 
   const letters = useMemo(() => (language === "gr" ? greekLetters : englishLetters), [language]);
 
-  const setShiftedTextsDebounce = useCallback(
-    debounce((l: string[], t: string) => {
-      const allShifts = [];
-
-      for (let i = 0; i < l.length; i++) {
-        const shiftedText = t
-          .toLocaleLowerCase()
-          .split("")
-          .map(letter => {
-            if (letter === " ") return " ";
-            const letterIndex = l.findIndex(grLetter => grLetter === letter);
-            const newIndex = (letterIndex + i) % l.length;
-
-            return l[newIndex];
-          })
-          .join("");
-
-        allShifts.push(shiftedText);
-      }
-
-      setShiftedTexts(allShifts);
-    }, 200),
+  const handleDebounceTextChange = useCallback(
+    debounce((newText: string) => {
+      setDebouncedText(newText);
+    }, 300),
     []
   );
+
+  const shiftedTexts = useMemo(() => {
+    const allShifts = [];
+
+    for (let i = 0; i < letters.length; i++) {
+      const shiftedText = debouncedText
+        .toLocaleLowerCase()
+        .split("")
+        .map(letter => {
+          if (letter === " ") return " ";
+
+          const letterIndex = letters.findIndex(l => l === letter);
+          const newIndex = (letterIndex + i) % letters.length;
+
+          return letters[newIndex];
+        })
+        .join("");
+
+      allShifts.push(shiftedText);
+    }
+
+    return allShifts;
+  }, [debouncedText, letters]);
 
   const handleChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const { value } = e.target;
+      const onlyLettersRegex = /^[a-zA-Zα-ωΑ-Ω ]+$/;
+      const isText = onlyLettersRegex.test(toGreeklish(value));
+      if (!isText && value) return;
 
-      const isTextRgx = /^[a-zA-Z ]+$/;
-      const isNotText = !isTextRgx.test(value);
-      if (isNotText) return;
-
-      setText(language === "en" ? toGreeklish(value) : toGreek(value));
+      const finalText = language === "en" ? toGreeklish(value) : toGreek(value);
+      setText(finalText);
+      handleDebounceTextChange(finalText);
     },
-    [language]
+    [language, handleDebounceTextChange]
   );
 
   const onLanguageChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
@@ -95,10 +101,6 @@ const CaesarsPage = () => {
     setLanguage(value);
     setText(prev => (value === "en" ? toGreeklish(prev) : toGreek(prev)));
   }, []);
-
-  useEffect(() => {
-    setShiftedTextsDebounce(letters, text);
-  }, [letters, setShiftedTextsDebounce, text]);
 
   return (
     <Stack alignItems='center' sx={{ height: "100%" }}>
