@@ -15,25 +15,23 @@ if ("serviceWorker" in navigator) {
     navigator.serviceWorker.addEventListener("controllerchange", event => {
       // A new service worker has taken over, check if there's a new version of the app.
 
-      event.waitUntil(
-        caches.keys().then(async cacheNames => {
-          const isCurrentVersion = cacheNames.find(cacheName => cacheName === currentCacheName);
+      caches.keys().then(async cacheNames => {
+        const isCurrentVersion = cacheNames.find(cacheName => cacheName === currentCacheName);
 
-          console.log({ isCurrentVersion });
+        console.log({ isCurrentVersion, cacheNames });
 
-          if (window.confirm("A new version of this app is available. Would you like to update?")) {
-            await Promise.all(
-              cacheNames
-                .filter(cacheName => cacheName !== `cache-every-file-${process.env.VERSION}`)
-                .map(cacheName => caches.delete(cacheName))
-            );
+        if (window.confirm("A new version of this app is available. Would you like to update?")) {
+          await Promise.all(
+            cacheNames
+              .filter(cacheName => cacheName !== `cache-every-file-${process.env.VERSION}`)
+              .map(cacheName => caches.delete(cacheName))
+          );
 
-            window.location.reload();
-          }
+          window.location.reload();
+        }
 
-          console.log("Deleting old cache");
-        })
-      );
+        console.log("Deleting old cache");
+      });
     });
   }
 }
