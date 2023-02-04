@@ -49,8 +49,6 @@ module.exports = (env, argv) => {
         clientsClaim: true,
         skipWaiting: true,
         cleanupOutdatedCaches: true,
-        maximumFileSizeToCacheInBytes: 8097152,
-        importScripts: ["custom-sw.js"],
         runtimeCaching: [
           {
             urlPattern: /.*/,
