@@ -23,25 +23,8 @@ if ("serviceWorker" in navigator) {
 
         if (isCurrentVersion) return;
 
-        Promise.all(
-          oldCacheKeys.map(key => {
-            console.log("[SW] Deleting Old Cache: ", key);
-            return caches.delete(key);
-          })
-        );
-
         if (window.confirm("A new version of this app is available. Would you like to update?")) {
           window.location.reload();
-          // const prevVersion = Number(VERSION) - 0.001;
-          //
-
-          // caches.delete(cacheName).then(boolean => {
-          //   if (boolean) {
-          //     console.log(`Cache deleted ${cacheName}`);
-          //   } else {
-          //     console.log("Cache not found");
-          //   }
-          // });
         }
       });
     });

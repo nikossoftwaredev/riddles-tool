@@ -6,9 +6,7 @@ const CopyPlugin = require("copy-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 const CompressionPlugin = require("compression-webpack-plugin");
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
-const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const WorkboxWebpackPlugin = require("workbox-webpack-plugin");
 
 dotenv.config({ path: ".env" });
@@ -52,6 +50,7 @@ module.exports = (env, argv) => {
         skipWaiting: true,
         cleanupOutdatedCaches: true,
         maximumFileSizeToCacheInBytes: 8097152,
+        importScripts: ["src/custom-sw.js"],
         runtimeCaching: [
           {
             urlPattern: /.*/,
