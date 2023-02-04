@@ -22,8 +22,7 @@ module.exports = (env, argv) => {
     output: {
       clean: true,
       path: path.resolve(__dirname, "dist"),
-      filename: "[name].[contenthash:8].js",
-      chunkFilename: "[name].[contenthash:8].js",
+      filename: "index.js",
       publicPath: "/"
     },
     optimization: {

@@ -25,12 +25,10 @@ if ("serviceWorker" in navigator) {
 
       await Promise.all(cachesToDelete.map(cacheName => caches.delete(cacheName)));
 
-      if (
-        !isCurrentVersion &&
-        window.confirm("A new version of this app is available. Would you like to update?")
-      ) {
-        window.location.reload();
-      }
+      if (!isCurrentVersion)
+        if (window.confirm("A new version of this app is available. Would you like to update?")) {
+          window.location.reload();
+        }
     });
   }
 }
