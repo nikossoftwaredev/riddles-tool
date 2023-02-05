@@ -95,10 +95,21 @@ const RiddleTabs = () => {
     return Math.max(foundIndex, 0);
   }, [tabName]);
 
+  const height = useMemo(() => {
+    const vh = window.innerHeight * 0.01;
+
+    return `calc(${vh}px * 100);`;
+  }, []);
+
   return (
     <Stack
       gap={2}
-      sx={{ height: "100vh", width: "350px", maxWidth: "100vw", position: "relative" }}
+      sx={{
+        height,
+        width: "350px",
+        maxWidth: "100vw",
+        position: "relative"
+      }}
       direction='column'
       alignItems='center'
       justifyContent='center'
