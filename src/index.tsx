@@ -1,10 +1,17 @@
 import "react-perfect-scrollbar/dist/css/styles.css";
+import App from "App";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import App from "App";
 
 const { VERSION } = process.env;
 const currentCacheName = `cache-every-file-${VERSION}`;
+
+const SendNewVersionEvent = () => {
+  const customEvent = new CustomEvent("new-version-available", {
+    detail: { message: "Update" }
+  });
+  document.dispatchEvent(customEvent);
+};
 
 if ("serviceWorker" in navigator) {
   if (process.env.NODE_ENV === "production") {
@@ -25,10 +32,9 @@ if ("serviceWorker" in navigator) {
 
       await Promise.all(cachesToDelete.map(cacheName => caches.delete(cacheName)));
 
-      if (!isCurrentVersion)
-        if (window.confirm("A new version of this app is available. Would you like to update?")) {
-          window.location.reload();
-        }
+      if (!isCurrentVersion) {
+        SendNewVersionEvent();
+      }
     });
   }
 }
