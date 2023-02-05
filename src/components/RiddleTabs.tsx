@@ -5,6 +5,7 @@ import { Stack, Box, Tabs, Tab, Typography, colors } from "@mui/material";
 import CompareArrowsIcon from "@mui/icons-material/CompareArrows";
 import SearchIcon from "@mui/icons-material/Search";
 import SavingsIcon from "@mui/icons-material/Savings";
+import ImageIcon from "@mui/icons-material/Image";
 import LettersNumbersPage from "pages/LettersNumbersPage";
 import SearchPage from "pages/SearchPage";
 import PigPenPage from "pages/PigPenPage";
@@ -15,6 +16,7 @@ import TabScrollButton from "@mui/material/TabScrollButton";
 import CaesarsPage from "pages/CaesarsPage";
 import TextAnalyzePage from "pages/TextAnalyzePage";
 import AbcIcon from "@mui/icons-material/Abc";
+import ImagesPage from "pages/ImagesPage";
 import IconWrapper from "./IconWrapper";
 
 const tabsConfig = [
@@ -59,6 +61,12 @@ const tabsConfig = [
     label: "Pig pen",
     icon: <SavingsIcon />,
     tabContent: <PigPenPage />
+  },
+  {
+    id: "images",
+    label: "Images",
+    icon: <ImageIcon />,
+    tabContent: <ImagesPage />
   }
 ];
 

@@ -25,6 +25,7 @@ import IconWrapper from "components/IconWrapper";
 import { toGreek, toGreeklish } from "greek-utils";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import { styled } from "@mui/styles";
+import { compareVowels } from "utils/text";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -75,7 +76,7 @@ const CaesarsPage = () => {
         })
         .join("");
 
-      allShifts.push(shiftedText);
+      allShifts.push({ shift: i, text: shiftedText });
     }
 
     return allShifts;
@@ -85,7 +86,7 @@ const CaesarsPage = () => {
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const { value } = e.target;
       const onlyLettersRegex = /^[a-zA-Zα-ωΑ-Ω ]+$/;
-      const isText = onlyLettersRegex.test(toGreeklish(value));
+      const isText = onlyLettersRegex.test(value);
       if (!isText && value) return;
 
       const finalText = language === "en" ? toGreeklish(value) : toGreek(value);
@@ -152,25 +153,27 @@ const CaesarsPage = () => {
               </StyledTableRow>
             </TableHead>
             <TableBody>
-              {shiftedTexts.map((shiftedText, index) => (
-                // eslint-disable-next-line react/no-array-index-key
-                <StyledTableRow key={index} sx={{ overflow: "auto" }}>
-                  <StyledTableCell>+{index}</StyledTableCell>
-                  <StyledTableCell>
-                    <Stack
-                      alignItems='center'
-                      justifyContent='center'
-                      direction='row'
-                      sx={{ overflow: "auto", maxWidth: "100vh" }}
-                    >
-                      {shiftedText}
-                      <IconButton onClick={() => navigator.clipboard.writeText(shiftedText)}>
-                        <ContentCopyIcon fontSize='small' sx={{ marginLeft: "auto" }} />
-                      </IconButton>
-                    </Stack>
-                  </StyledTableCell>
-                </StyledTableRow>
-              ))}
+              {shiftedTexts
+                .sort((a, b) => compareVowels(a.text, b.text))
+                .map(shiftedText => (
+                  // eslint-disable-next-line react/no-array-index-key
+                  <StyledTableRow key={shiftedText.shift} sx={{ overflow: "auto" }}>
+                    <StyledTableCell>+{shiftedText.shift}</StyledTableCell>
+                    <StyledTableCell>
+                      <Stack
+                        alignItems='center'
+                        justifyContent='center'
+                        direction='row'
+                        sx={{ overflow: "auto", maxWidth: "100vh" }}
+                      >
+                        {shiftedText.text}
+                        <IconButton onClick={() => navigator.clipboard.writeText(shiftedText.text)}>
+                          <ContentCopyIcon fontSize='small' sx={{ marginLeft: "auto" }} />
+                        </IconButton>
+                      </Stack>
+                    </StyledTableCell>
+                  </StyledTableRow>
+                ))}
             </TableBody>
           </Table>
         </TableContainer>

@@ -1,53 +1,53 @@
-import { useState, useRef } from 'react';
-import { Button, Stack, Typography, Grid } from '@mui/material';
-import SpaceBarIcon from '@mui/icons-material/SpaceBar';
-import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
-import MinimizeIcon from '@mui/icons-material/Minimize';
-import BackspaceIcon from '@mui/icons-material/Backspace';
-import morse from 'morse';
-import ClearIcon from '@mui/icons-material/Clear';
-import CopyText from 'components/CopyText';
+import { useState, useRef } from "react";
+import { Button, Stack, Typography, Grid } from "@mui/material";
+import SpaceBarIcon from "@mui/icons-material/SpaceBar";
+import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
+import MinimizeIcon from "@mui/icons-material/Minimize";
+import BackspaceIcon from "@mui/icons-material/Backspace";
+import morse from "morse";
+import ClearIcon from "@mui/icons-material/Clear";
+import CopyText from "components/CopyText";
 
 const MorsePage = () => {
-  const [morseText, setMorseText] = useState('');
+  const [morseText, setMorseText] = useState("");
   const audio = useRef<HTMLAudioElement>();
 
-  const onMorseClick = (mode: '.' | '-' | ' ') => () => {
+  const onMorseClick = (mode: "." | "-" | " ") => () => {
     setMorseText(prev => `${prev}${mode}`);
-    if (mode !== ' ') {
+    if (mode !== " ") {
       audio.current?.pause();
-      audio.current = new Audio(`assets/${mode === '.' ? 'dot' : 'dash'}.mp3`);
+      audio.current = new Audio(`assets/${mode === "." ? "dot" : "dash"}.mp3`);
       audio.current?.play();
     }
   };
 
   return (
-    <Stack gap={2} sx={{ height: '100%', width: '100%' }} direction='column' alignItems='center'>
+    <Stack gap={2} sx={{ height: "100%", width: "100%" }} direction='column' alignItems='center'>
       <Typography align='center' variant='h5'>
-        {morseText || 'Type Morse...'}
+        {morseText || "Type Morse..."}
       </Typography>
       <CopyText text={morse.decode(morseText)} />
       <Grid container spacing={2} justifyItems='stretch'>
         <Grid item xs={6}>
           <Button
-            sx={{ backgroundColor: 'black', width: '100%' }}
+            sx={{ backgroundColor: "black", width: "100%" }}
             variant='contained'
-            onClick={onMorseClick('.')}
+            onClick={onMorseClick(".")}
           >
             <FiberManualRecordIcon />
           </Button>
         </Grid>
         <Grid item xs={6}>
           <Button
-            sx={{ backgroundColor: 'black', width: '100%' }}
+            sx={{ backgroundColor: "black", width: "100%" }}
             variant='contained'
-            onClick={onMorseClick('-')}
+            onClick={onMorseClick("-")}
           >
             <MinimizeIcon />
           </Button>
         </Grid>
         <Grid item xs={12}>
-          <Button sx={{ width: '100%' }} variant='contained' onClick={onMorseClick(' ')}>
+          <Button sx={{ width: "100%" }} variant='contained' onClick={onMorseClick(" ")}>
             <SpaceBarIcon />
           </Button>
         </Grid>
@@ -55,10 +55,10 @@ const MorsePage = () => {
           <Button
             variant='contained'
             color='error'
-            sx={{ width: '100%' }}
+            sx={{ width: "100%" }}
             disabled={morseText.length === 0}
             onClick={() => {
-              setMorseText('');
+              setMorseText("");
             }}
             aria-label='delete'
           >
@@ -69,7 +69,7 @@ const MorsePage = () => {
           <Button
             variant='contained'
             color='error'
-            sx={{ width: '100%' }}
+            sx={{ width: "100%" }}
             disabled={morseText.length === 0}
             onClick={() => {
               setMorseText(prev => prev.slice(0, -1));
@@ -80,6 +80,7 @@ const MorsePage = () => {
           </Button>
         </Grid>
       </Grid>
+      <img alt='mendeleev' src='assets/morse-code.svg' style={{ width: "100%" }} />
     </Stack>
   );
 };
