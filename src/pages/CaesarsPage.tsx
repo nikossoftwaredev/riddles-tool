@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback, useEffect } from "react";
+import { useState, useMemo, useCallback } from "react";
 import {
   Stack,
   TextField,
@@ -16,7 +16,7 @@ import {
   RadioGroup,
   IconButton,
   tableCellClasses,
-  debounce
+  Button
 } from "@mui/material";
 import ClearIcon from "@mui/icons-material/Clear";
 import { englishLetters, greekLetters } from "data/letters";
@@ -25,7 +25,7 @@ import IconWrapper from "components/IconWrapper";
 import { toGreek, toGreeklish } from "greek-utils";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import { styled } from "@mui/styles";
-import { compareVowels } from "utils/text";
+import { compareLikelihood } from "utils/text";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -51,13 +51,6 @@ const CaesarsPage = () => {
   const [language, setLanguage] = useState("en");
 
   const letters = useMemo(() => (language === "gr" ? greekLetters : englishLetters), [language]);
-
-  const handleDebounceTextChange = useCallback(
-    debounce((newText: string) => {
-      setDebouncedText(newText);
-    }, 300),
-    []
-  );
 
   const shiftedTexts = useMemo(() => {
     const allShifts = [];
@@ -91,9 +84,8 @@ const CaesarsPage = () => {
 
       const finalText = language === "en" ? toGreeklish(value) : toGreek(value);
       setText(finalText);
-      handleDebounceTextChange(finalText);
     },
-    [language, handleDebounceTextChange]
+    [language]
   );
 
   const onLanguageChange = useCallback(
@@ -103,45 +95,55 @@ const CaesarsPage = () => {
       setLanguage(value);
       const finalText = value === "en" ? toGreeklish(text) : toGreek(text);
       setText(finalText);
-      handleDebounceTextChange(finalText);
     },
-    [handleDebounceTextChange, text]
+    [text]
+  );
+
+  const onKeyDown = useCallback(
+    (event: React.KeyboardEvent<HTMLDivElement>) => {
+      if (event.key === "Enter") {
+        setDebouncedText(text);
+      }
+    },
+    [text]
   );
 
   return (
-    <Stack alignItems='center' sx={{ height: "100%" }}>
-      <Stack alignItems='center'>
-        <FormControl fullWidth>
-          <RadioGroup
-            row
-            sx={{ alignItems: "center", justifyContent: "center" }}
-            aria-labelledby='demo-radio-buttons-group-label'
-            value={language}
-            name='radio-buttons-group'
-            onChange={onLanguageChange}
-          >
-            <FormControlLabel value='gr' control={<Radio />} label='Greek' />
-            <FormControlLabel value='en' control={<Radio />} label='English' />
-          </RadioGroup>
-        </FormControl>
-        <TextField
-          fullWidth
-          size='small'
-          value={text}
-          onChange={handleChange}
-          id='outlined-basic'
-          label={`Text(${language})`}
-          variant='outlined'
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position='end'>
-                <ClearIcon onClick={() => setText("")} />
-              </InputAdornment>
-            )
-          }}
-        />
-      </Stack>
-      <PerfectScrollbar style={{ width: "100%", flex: 1, marginTop: "8px" }}>
+    <Stack alignItems='center' sx={{ height: "100%" }} gap={2}>
+      <FormControl fullWidth>
+        <RadioGroup
+          row
+          sx={{ alignItems: "center", justifyContent: "center" }}
+          aria-labelledby='demo-radio-buttons-group-label'
+          value={language}
+          name='radio-buttons-group'
+          onChange={onLanguageChange}
+        >
+          <FormControlLabel value='gr' control={<Radio />} label='Greek' />
+          <FormControlLabel value='en' control={<Radio />} label='English' />
+        </RadioGroup>
+      </FormControl>
+      <TextField
+        fullWidth
+        size='small'
+        value={text}
+        onKeyDown={onKeyDown}
+        onChange={handleChange}
+        id='outlined-basic'
+        label={`Text(${language})`}
+        variant='outlined'
+        InputProps={{
+          endAdornment: (
+            <InputAdornment position='end'>
+              <ClearIcon onClick={() => setText("")} />
+            </InputAdornment>
+          )
+        }}
+      />
+      <Button fullWidth variant='contained' color='primary' onClick={() => setDebouncedText(text)}>
+        APPLY SHIFTS
+      </Button>
+      <PerfectScrollbar style={{ width: "100%", flex: 1 }}>
         <TableContainer component={Paper}>
           <Table aria-label='simple table'>
             <TableHead>
@@ -154,7 +156,7 @@ const CaesarsPage = () => {
             </TableHead>
             <TableBody>
               {shiftedTexts
-                .sort((a, b) => compareVowels(a.text, b.text))
+                .sort((a, b) => compareLikelihood(a.text, b.text))
                 .map(shiftedText => (
                   // eslint-disable-next-line react/no-array-index-key
                   <StyledTableRow key={shiftedText.shift} sx={{ overflow: "auto" }}>
