@@ -7,10 +7,12 @@ const { VERSION } = process.env;
 const currentCacheName = `cache-every-file-${VERSION}`;
 
 const SendNewVersionEvent = () => {
-  const customEvent = new CustomEvent("new-version-available", {
-    detail: { message: "Update" }
-  });
-  document.dispatchEvent(customEvent);
+  setTimeout(() => {
+    const customEvent = new CustomEvent("new-version-available", {
+      detail: { message: "Update" }
+    });
+    document.dispatchEvent(customEvent);
+  }, 2000);
 };
 
 if ("serviceWorker" in navigator) {
