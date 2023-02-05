@@ -37,7 +37,9 @@ class ErrorBoundary extends Component<Props, State> {
           <h1>Sorry.. there was an error</h1>
           {error && <p>{error.message}</p>}
           {errorInfo && <p>{errorInfo.componentStack}</p>}
-          <Button href='/search'>Home</Button>
+          <Button href='/search' color='primary'>
+            Home
+          </Button>
         </Stack>
       );
     }

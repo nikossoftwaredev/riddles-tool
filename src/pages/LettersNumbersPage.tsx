@@ -31,7 +31,7 @@ const LettersNumbersPage = () => {
     let english: number[] | string[] = [];
 
     if (mode.from === "Letters") {
-      const textArray = text.toLowerCase().split("");
+      const textArray = text.toUpperCase().split("");
       greek = textArray
         .map((letter: string) => greekLetters.indexOf(letter) + 1)
         .filter((letter: number) => letter > 0);
@@ -48,8 +48,8 @@ const LettersNumbersPage = () => {
     }
 
     return {
-      gr: greek.join(" ").toUpperCase(),
-      en: english.join(" ").toUpperCase()
+      gr: greek.join(" "),
+      en: english.join(" ")
     };
   }, [text, mode.from]);
 

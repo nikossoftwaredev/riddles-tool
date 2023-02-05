@@ -10,14 +10,63 @@ import {
   Radio,
   RadioGroup,
   colors,
-  Grid
+  Grid,
+  Paper
 } from "@mui/material";
 import ClearIcon from "@mui/icons-material/Clear";
 import { greekLetters, englishLetters } from "data/letters";
+import { startCase } from "lodash";
 
 interface CharactersInfo {
   [key: string]: number;
 }
+
+const GroupTypes = {
+  distinct: 1,
+  missing: 0
+};
+
+const TextInfo = ({ label, value }: { label: string; value: string | number }) => {
+  return (
+    <Grid xs={4}>
+      <Stack direction='column' alignItems='center'>
+        <span>
+          <strong>{label}</strong>
+        </span>
+        <span>{value}</span>
+      </Stack>
+    </Grid>
+  );
+};
+
+const LetterInfo = ({
+  letters,
+  charactersInfo,
+  type
+}: {
+  letters: string[];
+  charactersInfo: CharactersInfo;
+  type: "distinct" | "missing";
+}) => (
+  <Paper sx={{ width: "90%", p: 2, m: 1 }}>
+    <Stack direction='column' alignItems='center' gap={1}>
+      <span>
+        <strong>{startCase(type)} Letters</strong>
+      </span>
+      <span>
+        {letters
+          .filter(letter => {
+            const appearances = charactersInfo[letter] || 0;
+
+            if (appearances === GroupTypes[type]) return true;
+
+            return false;
+          })
+          .join("")}
+      </span>
+    </Stack>
+  </Paper>
+);
 
 const TextAnalyzePage = () => {
   const [text, setText] = useState("");
@@ -32,7 +81,7 @@ const TextAnalyzePage = () => {
 
   const charactersInfo = useMemo(() => {
     return text
-      .toLocaleLowerCase()
+      .toLocaleUpperCase()
       .split("")
       .reduce((acc, letter) => {
         if (acc[letter] != null) return { ...acc, [letter]: acc[letter] + 1 };
@@ -40,6 +89,10 @@ const TextAnalyzePage = () => {
         return { ...acc, [letter]: 1 };
       }, {} as CharactersInfo);
   }, [text]);
+
+  const characters = text.replace(/\s/g, "").length;
+  const words = text.split(/\s+/).filter(word => word.length > 0).length;
+  const lines = text.split("\n").length;
 
   const onLanguageChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
@@ -68,7 +121,7 @@ const TextAnalyzePage = () => {
         sx={{ mt: 2 }}
         fullWidth
         multiline
-        rows={3}
+        rows={4}
         size='small'
         value={text}
         onChange={handleChange}
@@ -83,25 +136,35 @@ const TextAnalyzePage = () => {
           )
         }}
       />
-      <Typography>Characters: {text.length}</Typography>
-      <Grid container direction='row' justifyContent='flex-start' alignItems='center'>
-        {letters.map(letter => {
-          const appearances = charactersInfo[letter] || 0;
+      <Paper sx={{ m: 1, width: "90%", p: 2 }}>
+        <Grid container direction='row' justifyContent='flex-start' alignItems='center'>
+          <TextInfo label='Characters' value={characters} />
+          <TextInfo label='Words' value={words} />
+          <TextInfo label='Lines' value={lines} />
+        </Grid>
+      </Paper>
+      <Paper sx={{ width: "90%", p: 2, m: 1 }}>
+        <Grid container direction='row' justifyContent='flex-start' alignItems='center'>
+          {letters.map(letter => {
+            const appearances = charactersInfo[letter] || 0;
 
-          let color = "black";
+            let color = "black";
 
-          if (appearances) color = colors.green[500];
-          if (appearances > 1) color = colors.orange[500];
+            if (appearances) color = colors.green[500];
+            if (appearances > 1) color = colors.orange[500];
 
-          return (
-            <Grid key={letter} item xs={4}>
-              <Typography sx={{ color }}>
-                {letter.toUpperCase()}: {appearances}
-              </Typography>
-            </Grid>
-          );
-        })}
-      </Grid>
+            return (
+              <Grid key={letter} item xs={4}>
+                <Typography align='center' sx={{ color }}>
+                  <strong>{letter.toUpperCase()}:</strong> {appearances}
+                </Typography>
+              </Grid>
+            );
+          })}
+        </Grid>
+      </Paper>
+      <LetterInfo type='distinct' charactersInfo={charactersInfo} letters={letters} />
+      <LetterInfo type='missing' charactersInfo={charactersInfo} letters={letters} />
     </Stack>
   );
 };

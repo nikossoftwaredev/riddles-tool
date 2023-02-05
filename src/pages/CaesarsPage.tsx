@@ -63,7 +63,7 @@ const CaesarsPage = () => {
 
     for (let i = 0; i < letters.length; i++) {
       const shiftedText = debouncedText
-        .toLocaleLowerCase()
+        .toLocaleUpperCase()
         .split("")
         .map(letter => {
           if (letter === " ") return " ";
@@ -100,11 +100,11 @@ const CaesarsPage = () => {
       const { value } = e.target;
 
       setLanguage(value);
-      const finalText = value === "en" ? toGreeklish(value) : toGreek(value);
+      const finalText = value === "en" ? toGreeklish(text) : toGreek(text);
       setText(finalText);
       handleDebounceTextChange(finalText);
     },
-    [handleDebounceTextChange]
+    [handleDebounceTextChange, text]
   );
 
   return (
