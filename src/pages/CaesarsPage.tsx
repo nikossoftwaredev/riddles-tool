@@ -25,7 +25,6 @@ import IconWrapper from "components/IconWrapper";
 import { toGreek, toGreeklish } from "greek-utils";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import { styled } from "@mui/styles";
-import { compareLikelihood } from "utils/text";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -155,27 +154,25 @@ const CaesarsPage = () => {
               </StyledTableRow>
             </TableHead>
             <TableBody>
-              {shiftedTexts
-                .sort((a, b) => compareLikelihood(a.text, b.text))
-                .map(shiftedText => (
-                  // eslint-disable-next-line react/no-array-index-key
-                  <StyledTableRow key={shiftedText.shift} sx={{ overflow: "auto" }}>
-                    <StyledTableCell>+{shiftedText.shift}</StyledTableCell>
-                    <StyledTableCell>
-                      <Stack
-                        alignItems='center'
-                        justifyContent='center'
-                        direction='row'
-                        sx={{ overflow: "auto", maxWidth: "100vh" }}
-                      >
-                        {shiftedText.text}
-                        <IconButton onClick={() => navigator.clipboard.writeText(shiftedText.text)}>
-                          <ContentCopyIcon fontSize='small' sx={{ marginLeft: "auto" }} />
-                        </IconButton>
-                      </Stack>
-                    </StyledTableCell>
-                  </StyledTableRow>
-                ))}
+              {shiftedTexts.map(shiftedText => (
+                // eslint-disable-next-line react/no-array-index-key
+                <StyledTableRow key={shiftedText.shift} sx={{ overflow: "auto" }}>
+                  <StyledTableCell>+{shiftedText.shift}</StyledTableCell>
+                  <StyledTableCell>
+                    <Stack
+                      alignItems='center'
+                      justifyContent='center'
+                      direction='row'
+                      sx={{ overflow: "auto", maxWidth: "100vh" }}
+                    >
+                      {shiftedText.text}
+                      <IconButton onClick={() => navigator.clipboard.writeText(shiftedText.text)}>
+                        <ContentCopyIcon fontSize='small' sx={{ marginLeft: "auto" }} />
+                      </IconButton>
+                    </Stack>
+                  </StyledTableCell>
+                </StyledTableRow>
+              ))}
             </TableBody>
           </Table>
         </TableContainer>
