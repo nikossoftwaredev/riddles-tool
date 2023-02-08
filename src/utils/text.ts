@@ -1,8 +1,8 @@
 import { colors } from "@mui/material";
+import { english3GramModel } from "data/english-3-gram-model";
+import { greek3GramModel } from "data/greek-3-gram-model";
 import { toGreek } from "greek-utils";
 import wildcardMatch from "wildcard-match";
-// import { englishDictionary } from "./english-dictionary";
-// import { greekDictionary } from "./greek-dictionary";
 
 export const getHighlightedText = (text: string, term: string): string => {
   // eslint-disable-next-line no-param-reassign
@@ -18,12 +18,32 @@ export const getHighlightedText = (text: string, term: string): string => {
   return text.replace(rgx, match => `<span style="color:${colors.green[600]}">${match}</span>`);
 };
 
-// export const compareLikelihood = (a: string, b: string): number => {
-//   const first = a.toLowerCase();
-//   const second = b.toLowerCase();
+const calculateNGramScore = (word: string, N: number, language: string): number => {
+  let score = 1;
 
-//   const aExists = englishDictionary.includes(first) || greekDictionary.includes(first);
-//   const bExists = englishDictionary.includes(second) || greekDictionary.includes(second);
+  const nGramModel = language === "en" ? english3GramModel : greek3GramModel;
 
-//   return Number(bExists) - Number(aExists);
-// };
+  for (let i = 0; i < word.length - N + 1; i++) {
+    const nGram = word.slice(i, i + N);
+
+    if (nGramModel[nGram]) {
+      score *= nGramModel[nGram];
+    } else {
+      score *= 10;
+    }
+  }
+
+  return score;
+};
+
+export const compareLikelihood = (a: string, b: string, language: string): number => {
+  const aWord = a.toUpperCase();
+  const bWord = b.toUpperCase();
+
+  const aScore = calculateNGramScore(aWord, 3, language);
+  const bScore = calculateNGramScore(bWord, 3, language);
+
+  const result = bScore - aScore >= 0 ? 1 : -1;
+
+  return result;
+};

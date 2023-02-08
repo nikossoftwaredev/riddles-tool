@@ -25,6 +25,7 @@ import IconWrapper from "components/IconWrapper";
 import { toGreek, toGreeklish } from "greek-utils";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import { styled } from "@mui/styles";
+import { compareLikelihood } from "utils/text";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -71,8 +72,8 @@ const CaesarsPage = () => {
       allShifts.push({ shift: i, text: shiftedText });
     }
 
-    return allShifts;
-  }, [debouncedText, letters]);
+    return allShifts.sort((a, b) => compareLikelihood(a.text, b.text, language));
+  }, [debouncedText, language, letters]);
 
   const handleChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -94,6 +95,7 @@ const CaesarsPage = () => {
       setLanguage(value);
       const finalText = value === "en" ? toGreeklish(text) : toGreek(text);
       setText(finalText);
+      setDebouncedText(finalText);
     },
     [text]
   );
