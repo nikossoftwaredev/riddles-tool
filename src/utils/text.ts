@@ -29,7 +29,7 @@ const calculateNGramScore = (word: string, N: number, language: string): number 
     if (nGramModel[nGram]) {
       score *= nGramModel[nGram];
     } else {
-      score *= 10;
+      score *= 5;
     }
   }
 

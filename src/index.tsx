@@ -2,6 +2,15 @@ import "react-perfect-scrollbar/dist/css/styles.css";
 import App from "App";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+// import { cryptogramEncryption, solveCryptogram } from "utils/cryptogram";
+
+// const cryptogram = cryptogramEncryption();
+
+// console.log(cryptogram);
+
+// const solution = solveCryptogram(cryptogram);
+
+// console.log(solution);
 
 const { VERSION } = process.env;
 const currentCacheName = `cache-every-file-${VERSION}`;
