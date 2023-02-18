@@ -13,7 +13,7 @@ const defaultFilters: ISearchFilters = {
   searchTerm: "",
   characters: 0,
   searchMode: "search",
-  dataset: "ΟΔΟΝΥΜΙΟ"
+  dataset: "ΝΙΚΑΙΑ"
 };
 
 const threshold = 50;
