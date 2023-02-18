@@ -53,6 +53,11 @@ const SearchPage = () => {
 
       filteredStreets = filteredStreets.filter(({ street }) => isMatch(street));
     } else if (term) {
+      const tempFilteredStreets = [...filteredStreets];
+      filteredStreets = filteredStreets.filter(({ street }) => street.startsWith(term));
+
+      if (filteredStreets.length === 0) filteredStreets = [...tempFilteredStreets];
+
       filteredStreets = filteredStreets.filter(({ street }) => {
         const rgx = new RegExp(term, "ig");
         return rgx.test(street);
