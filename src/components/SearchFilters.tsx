@@ -58,7 +58,7 @@ const SearchFilters = ({ searchFilters, handleChange }: SearchFiltersProps) => {
             handleChange(e.target.value, "characters");
           }}
         >
-          {Array.from(Array(20).keys()).map(number => (
+          {Array.from(Array(25).keys()).map(number => (
             <MenuItem key={number} value={number}>
               {number || "Unset"}
             </MenuItem>
