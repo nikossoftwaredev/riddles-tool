@@ -17,6 +17,8 @@ import CaesarsPage from "pages/CaesarsPage";
 import TextAnalyzePage from "pages/TextAnalyzePage";
 import AbcIcon from "@mui/icons-material/Abc";
 import ImagesPage from "pages/ImagesPage";
+import CountWords from "pages/CountWords";
+import NumbersIcon from "@mui/icons-material/Numbers";
 import IconWrapper from "./IconWrapper";
 
 const tabsConfig = [
@@ -67,6 +69,12 @@ const tabsConfig = [
     label: "Images",
     icon: <ImageIcon />,
     tabContent: <ImagesPage />
+  },
+  {
+    id: "count-words",
+    label: "Count Words",
+    icon: <NumbersIcon />,
+    tabContent: <CountWords />
   }
 ];
 
