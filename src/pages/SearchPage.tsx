@@ -18,6 +18,8 @@ const defaultFilters: ISearchFilters = {
 
 const threshold = 50;
 
+const escapeRegex = (str: string) => str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
 const SearchPage = () => {
   const [searchFilters, setSearchFilters] = useState(defaultFilters);
 
@@ -59,7 +61,7 @@ const SearchPage = () => {
       if (filteredStreets.length === 0) filteredStreets = [...tempFilteredStreets];
 
       filteredStreets = filteredStreets.filter(({ street }) => {
-        const rgx = new RegExp(term, "ig");
+        const rgx = new RegExp(escapeRegex(term), "ig");
         return rgx.test(street);
       });
     }

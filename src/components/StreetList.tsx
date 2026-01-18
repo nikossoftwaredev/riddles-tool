@@ -4,8 +4,10 @@ import DirectionsIcon from "@mui/icons-material/Directions";
 import { ISearchFilters, LocationInfo } from "types/search";
 import { getHighlightedText } from "utils/text";
 
-export const showInMapClicked = (term: string) => {
-  window.open(`https://maps.google.com?q=${term}`);
+export const showInMapClicked = (term: string, town: string, query?: string) => {
+  const mapTown = town === "ΟΔΟΝΥΜΙΟ" ? "ΝΙΚΑΙΑ" : town;
+  const searchTerm = query ? `${query} ${mapTown}` : `${term.split(" ")[0]} ${mapTown}`;
+  window.open(`https://maps.google.com?q=${searchTerm}`);
 };
 
 const StreetList = ({
@@ -18,13 +20,13 @@ const StreetList = ({
   dataset: ISearchFilters["dataset"];
 }): JSX.Element => (
   <>
-    {items.map(({ street, town }) => {
+    {items.map(({ street, town, query }) => {
       const fullStreet = `${street} ${town}`;
       return (
         <ListItem
           key={fullStreet}
           style={{ borderBottom: "1px solid black" }}
-          onClick={() => showInMapClicked(fullStreet)}
+          onClick={() => showInMapClicked(fullStreet, town, query)}
           sx={{
             cursor: "pointer",
             "&:hover": { backgroundColor: colors.blue[600] }

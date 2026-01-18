@@ -2,6 +2,7 @@ export type IDataSet = "ΡΕΝΤΗΣ" | "ΝΙΚΑΙΑ" | "ΜΟΣΧΑΤΟ" | "Ο�
 export interface LocationInfo {
   town: "ΡΕΝΤΗΣ" | "ΝΙΚΑΙΑ" | "ΜΟΣΧΑΤΟ" | "ΟΔΟΝΥΜΙΟ";
   street: string;
+  query?: string;
 }
 export interface ISearchFilters {
   searchTerm: string;
