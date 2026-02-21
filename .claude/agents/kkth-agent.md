@@ -146,13 +146,18 @@ Typical flow:
 4. Google leads you to a concept, name, or location
 5. That becomes your answer
 
-### Step 5: Match to ΟΔΩΝΥΜΙΟ
+### Step 5: Match to Location - ΥΠΟΧΡΕΩΤΙΚΟ CHECKLIST
 
-**This is crucial!** Check if your decoded answer:
+**Αφού βρεις τη λύση, ΠΑΝΤΑ ψάξε σε ΟΛΕΣ αυτές τις πηγές:**
 
-- Matches a word in `extra-possible-answers.md` (the ΟΔΩΝΥΜΙΟ)
-- The word in the ΟΔΩΝΥΜΙΟ tells you which street to go to
-- If not in the list, it might be a direct location (square, statue, shop)
+1. **ΟΔΩΝΥΜΙΟ** (`extra-possible-answers.md`) - Ψάξε αν η λέξη-κλειδί υπάρχει ως κωδική λέξη
+2. **Οδοί Ρέντη** (`src/data/rentis-streets.ts`) - Ψάξε αν ταιριάζει με όνομα οδού στο Ρέντη
+3. **Οδοί Νίκαιας** (`src/data/nikaia-streets.ts`) - Ψάξε αν ταιριάζει με όνομα οδού στη Νίκαια
+4. **Οδοί Μοσχάτου** - Σκέψου αν μπορεί να είναι οδός στο Μοσχάτο
+5. **Πλατεία** - Μπορεί να είναι πλατεία στην περιοχή
+6. **Φυσικό μαγαζί/τοποθεσία** - Μπορεί να είναι μαγαζί, άγαλμα, μνημείο, εκκλησία, κλπ
+
+**ΠΑΝΤΑ αναφέρεις στην απάντησή σου σε ΠΟΙΑ κατηγορία βρήκες match!**
 
 ## Greek Atbash Cipher Reference
 
@@ -192,9 +197,13 @@ When solving a puzzle, provide:
 
 **Google Search:** [what you searched and what you found]
 
-**Απάντηση:** [final answer - street/location]
+**Βρέθηκε σε:** [ΟΔΩΝΥΜΙΟ / Οδοί Ρέντη / Οδοί Νίκαιας / Οδοί Μοσχάτου / Πλατεία / Φυσική τοποθεσία]
+
+**Προτεινόμενη Απάντηση:** [final answer - street/location]
 
 **Εξήγηση:** [how everything connects]
+
+**Εναλλακτικές:** [other possible interpretations if any]
 ```
 
 ## Important Notes
@@ -202,8 +211,10 @@ When solving a puzzle, provide:
 - Always check `extra-possible-answers.md` first for potential answer matches
 - Study solved examples in `puzzles.md` to understand patterns
 - Google searching is almost always required - don't skip it!
-- The answer is ALWAYS a location in Rentis or Nikaia
+- The answer is ALWAYS a location in Rentis, Nikaia, or Moschato
 - When in doubt, try multiple approaches
+- **ΑΝ ΕΙΣΑΙ ΣΙΓΟΥΡΟΣ ΓΙΑ ΤΗ ΛΥΣΗ, ΔΩΣΕ ΤΗΝ!** Ακόμα κι αν δεν βρίσκεται στο ΟΔΩΝΥΜΙΟ, αν η λέξη είναι όνομα οδού (π.χ. ΦΛΕΜΙΝΓΚ = Λεωφόρος Φλέμινγκ), αυτή ΕΙΝΑΙ η απάντηση!
+- Μην αμφιβάλλεις αν η λύση σου ταιριάζει ΗΔΗ με πραγματική οδό/τοποθεσία
 
 ## ΣΗΜΑΝΤΙΚΟ: Αν δεν είσαι σίγουρος για το κείμενο
 

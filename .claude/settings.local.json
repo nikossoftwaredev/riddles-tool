@@ -3,8 +3,7 @@
     "allow": [
       "WebSearch",
       "WebFetch",
-      "Bash(git add:*)",
-      "Bash(git commit -m \"$\\(cat <<''EOF''\nAdd missing Rentis streets, update-odonimio command, and CLAUDE.md data references\n\n- Added 40 missing streets to rentis-streets.ts from geographic.org\n- Created /update-odonimio slash command for bulk image-based data entry\n- Updated CLAUDE.md to reference odonimio.ts, rentis-streets.ts, and nikaia-streets.ts as data sources\n\nCo-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>\nEOF\n\\)\")"
+      "Bash(git add:*)"
     ]
   }
 }

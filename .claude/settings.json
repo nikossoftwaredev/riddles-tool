@@ -1,0 +1,24 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(chmod:*)",
+      "Bash(bash .claude/hooks/send-to-discord.sh)",
+      "Bash(printf:*)",
+      "Bash(curl:*)",
+      "Bash(cat:*)"
+    ]
+  },
+  "hooks": {
+    "SubagentStop": [
+      {
+        "matcher": "kkth-agent",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/hooks/send-to-discord.sh\""
+          }
+        ]
+      }
+    ]
+  }
+}
