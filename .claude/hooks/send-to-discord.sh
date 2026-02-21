@@ -1,14 +1,22 @@
 #!/bin/bash
 # Claude Code Hook: Send kkth-agent solution to Discord
-# Triggered by SubagentStop event for kkth-agent
+# Triggered by SubagentStop or PostToolUse (Task) event for kkth-agent
 
 WEBHOOK_URL="https://discord.com/api/webhooks/1474554327438983301/B_wxmPBw4HuIVN48epUpz1RUHKZQcPOD4LHPjJAGW98LU9tjs4taJ1w6Co-O4FhwyMIQ"
+
+# Debug log
+DEBUG_LOG="/tmp/discord-hook-debug.log"
+echo "=== Hook triggered at $(date) ===" >> "$DEBUG_LOG"
+echo "CLAUDE_PROJECT_DIR=$CLAUDE_PROJECT_DIR" >> "$DEBUG_LOG"
+echo "PWD=$(pwd)" >> "$DEBUG_LOG"
 
 # Save stdin to temp file (avoids bash escaping issues)
 INPUT_FILE=$(mktemp)
 PAYLOAD_FILE=$(mktemp)
 SCRIPT_FILE=$(mktemp --suffix=.js)
 cat > "$INPUT_FILE"
+echo "INPUT_FILE size: $(wc -c < "$INPUT_FILE")" >> "$DEBUG_LOG"
+echo "INPUT_FILE first 500 chars: $(head -c 500 "$INPUT_FILE")" >> "$DEBUG_LOG"
 
 # Write the Node.js formatting script to a temp file
 cat > "$SCRIPT_FILE" << 'ENDSCRIPT'
@@ -19,7 +27,31 @@ const payloadFile = process.argv[3];
 try {
   const raw = fs.readFileSync(inputFile, 'utf8');
   const input = JSON.parse(raw);
-  const msg = (input.last_assistant_message || '').trim();
+
+  // Handle both SubagentStop and PostToolUse input formats
+  let msg = '';
+
+  if (input.last_assistant_message) {
+    // SubagentStop format
+    msg = input.last_assistant_message.trim();
+  } else if (input.tool_input || input.tool_name) {
+    // PostToolUse format - only process kkth-agent tasks
+    const toolInput = input.tool_input || {};
+    if (typeof toolInput === 'string') {
+      try {
+        const parsed = JSON.parse(toolInput);
+        if (parsed.subagent_type !== 'kkth-agent') process.exit(0);
+      } catch(e) {
+        if (!toolInput.includes('kkth-agent')) process.exit(0);
+      }
+    } else {
+      if (toolInput.subagent_type !== 'kkth-agent') process.exit(0);
+    }
+    // Extract message from tool response
+    const resp = input.tool_response || input.tool_output || input.response || '';
+    msg = (typeof resp === 'string' ? resp : JSON.stringify(resp)).trim();
+  }
+
   if (!msg) process.exit(1);
 
   // Calculate duration from transcript file timestamps
@@ -158,13 +190,18 @@ try {
 ENDSCRIPT
 
 # Run the formatting script
-node "$SCRIPT_FILE" "$INPUT_FILE" "$PAYLOAD_FILE" 2>/dev/null
+node "$SCRIPT_FILE" "$INPUT_FILE" "$PAYLOAD_FILE" >> "$DEBUG_LOG" 2>&1
+echo "Node exit code: $?" >> "$DEBUG_LOG"
 
 # Send to Discord if payload was written
 if [ -s "$PAYLOAD_FILE" ]; then
-  curl -s -X POST "$WEBHOOK_URL" \
+  echo "PAYLOAD_FILE size: $(wc -c < "$PAYLOAD_FILE")" >> "$DEBUG_LOG"
+  CURL_RESPONSE=$(curl -s -w "\nHTTP_CODE:%{http_code}" -X POST "$WEBHOOK_URL" \
     -H "Content-Type: application/json" \
-    -d @"$PAYLOAD_FILE"
+    -d @"$PAYLOAD_FILE")
+  echo "Curl response: $CURL_RESPONSE" >> "$DEBUG_LOG"
+else
+  echo "PAYLOAD_FILE is empty or missing!" >> "$DEBUG_LOG"
 fi
 
 # Cleanup
